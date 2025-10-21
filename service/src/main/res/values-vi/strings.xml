@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="format_update_complete">Cập nhật %s thành công</string>
+    <string name="format_update_failure">Cập nhật %1$s: %2$s</string>
+    <string name="profile_process_result">Kết quả xử lý cấu hình</string>
+    <string name="profile_process_status">Trạng thái xử lý cấu hình</string>
+    <string name="profile_service_status">Trạng thái dịch vụ cấu hình</string>
+    <string name="profile_updater">Trình cập nhật cấu hình</string>
+    <string name="profile_updating">Cập nhật cấu hình</string>
+    <string name="provider_files">Tệp nhà cung cấp</string>
+    <string name="update_failure">Cập nhật thất bại</string>
+    <string name="update_successfully">Cập nhật thành công</string>
+</resources>
