@@ -1,4 +1,4 @@
-rootProject.name = "ClashMetaForAndroid"
+rootProject.name = "NetPulseForAndroid"
 
 include(":app")
 include(":core")

@@ -38,7 +38,7 @@
     <string name="format_traffic_forwarded">%s 已转发</string>
     <string name="global_mode">全局模式</string>
     <string name="hide_app_icon_title">隐藏应用图标</string>
-    <string name="hide_app_icon_desc">可以在拨号盘输入 *#*#252746382#*#* 打开应用</string>
+    <string name="hide_app_icon_desc">可以在拨号盘输入 *#*#63878573#*#* 打开应用</string>
     <string name="history">历史</string>
     <string name="import_from_file">从文件导入</string>
     <string name="import_from_url">从 URL 导入</string>
@@ -79,7 +79,7 @@
     <string name="update_time">更新时间</string>
     <string name="package_name">应用包名称</string>
     <string name="install_time">安装时间</string>
-    <string name="clash_meta_for_android">Clash Meta for Android</string>
+    <string name="clash_meta_for_android">NetPulse for Android</string>
     <string name="feedback">反馈</string>
     <string name="github_issues">Github Issues</string>
     <string name="tips_properties"><![CDATA[仅接受 <strong>Clash 配置文件</strong>(包含<strong>代理</strong>/<strong>规则</strong>)]]></string>
@@ -255,6 +255,6 @@
     <string name="toast_profile_updated_complete">更新配置 %s 成功</string>
     <string name="toast_profile_updated_failed">更新配置 %1$s 失败：%2$s</string>
     <string name="external_control_activity">外部控制</string>
-    <string name="external_control_started">Clash.Meta 服务已启动</string>
-    <string name="external_control_stopped">Clash.Meta 服务已停止</string>
+    <string name="external_control_started">NetPulse 服务已启动</string>
+    <string name="external_control_stopped">NetPulse 服务已停止</string>
 </resources>
