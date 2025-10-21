@@ -162,7 +162,7 @@
                             android:onClick="@{() -> self.request(Request.ToggleStatus)}"
                             android:text='@{clashRunning ? @string/stop_service : @string/start_service}'
                             android:textColor='@{clashRunning ? @android:color/white : @color/color_status_button_start_foreground}'
-                            app:backgroundTint='@{clashRunning ? @color/color_status_button_stop_background : @color/color_status_button_start_background}'
+                            android:backgroundTint='@{clashRunning ? @color/color_status_button_stop_background : @color/color_status_button_start_background}'
                             app:icon='@{clashRunning ? @drawable/ic_baseline_stop : @drawable/ic_baseline_play_arrow}'
                             app:iconGravity="textStart"
                             app:iconPadding="@dimen/main_status_button_icon_padding"

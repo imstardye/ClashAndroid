@@ -47,7 +47,7 @@ fun Context.resolveClickableAttrs(
             }
 
             override fun foreground(): Drawable? {
-                return getDrawable(R.styleable.Clickable_android_focusable)
+                return getDrawable(R.styleable.Clickable_android_foreground)
             }
 
         }
