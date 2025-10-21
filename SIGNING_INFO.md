@@ -27,14 +27,5 @@ Alternatively, on macOS you can use `openssl base64 -d` if the BSD `base64` util
 ## Gradle Configuration
 The root `build.gradle.kts` reads credentials from `signing.properties`. When a release build is requested, the build script now restores `release.keystore` from the Base64 file automatically if the binary keystore does not already exist.
 
-### Updating the credential values
-1. Open the `signing.properties` file in the project root.
-2. Edit the three keys below to match your keystore:
-   - `keystore.password`
-   - `key.alias`
-   - `key.password`
-3. Save the file and re-run your Gradle task; the `signingConfigs` block in `build.gradle.kts` will pick up the new values automatically.
-
-> **提示（中文说明）**：如需替换成你自己的签名信息，请直接修改项目根目录下的 `signing.properties` 文件，对应填入以上三个字段即可，无需改动其它代码。
 
 Please keep these credentials private if you plan to reuse them outside this isolated branch.
