@@ -1,4 +1,4 @@
-name: Update Clash-Core and Go Modules
+name: Update Core and Go Modules
 on:
   repository_dispatch:
     types:
@@ -68,8 +68,8 @@ jobs:
           title: 'Update Dependencies'
           draft: false
           body: |
-            - Update Clash-Meta Core
-            - Update Go Module Dependecies
+            - Update Native Core
+            - Update Go Module Dependencies
           labels: |
             Update
         
