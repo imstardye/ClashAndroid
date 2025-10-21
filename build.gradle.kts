@@ -147,7 +147,9 @@ subprojects {
                 )
             }
             named("debug") {
-                applicationIdSuffix = ".debug"
+                if (isApp) {
+                    applicationIdSuffix = ".debug"
+                }
                 versionNameSuffix = ".debug"
             }
         }
