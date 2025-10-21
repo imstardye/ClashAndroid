@@ -10,13 +10,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.ticker
+import com.github.kr328.clash.core.Clash
+import com.github.kr328.clash.core.bridge.*
 import com.github.kr328.clash.design.MainDesign
 import com.github.kr328.clash.design.ui.ToastDuration
 import com.github.kr328.clash.util.startClashService
 import com.github.kr328.clash.util.stopClashService
 import com.github.kr328.clash.util.withClash
 import com.github.kr328.clash.util.withProfile
-import com.github.kr328.clash.core.bridge.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
@@ -70,6 +71,17 @@ class MainActivity : BaseActivity<MainDesign>() {
                             startActivity(SettingsActivity::class.intent)
                         MainDesign.Request.OpenAbout ->
                             design.showAbout(queryAppVersionName())
+                        is MainDesign.Request.SetMode -> {
+                            withClash {
+                                val override = queryOverride(Clash.OverrideSlot.Session)
+
+                                override.mode = it.mode
+
+                                patchOverride(Clash.OverrideSlot.Session, override)
+                            }
+
+                            design.fetch()
+                        }
                     }
                 }
                 if (clashRunning) {

@@ -18,14 +18,41 @@ import kotlin.collections.ArrayDeque
 import kotlin.math.max
 
 class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
-    enum class Request {
-        ToggleStatus,
-        OpenProxy,
-        OpenProfiles,
-        OpenProviders,
-        OpenLogs,
-        OpenSettings,
-        OpenAbout,
+    sealed class Request {
+        object ToggleStatus : Request()
+        object OpenProxy : Request()
+        object OpenProfiles : Request()
+        object OpenProviders : Request()
+        object OpenLogs : Request()
+        object OpenSettings : Request()
+        object OpenAbout : Request()
+        data class SetMode(val mode: TunnelState.Mode) : Request()
+
+        companion object {
+            @JvmStatic
+            fun toggleStatus(): Request = ToggleStatus
+
+            @JvmStatic
+            fun openProxy(): Request = OpenProxy
+
+            @JvmStatic
+            fun openProfiles(): Request = OpenProfiles
+
+            @JvmStatic
+            fun openProviders(): Request = OpenProviders
+
+            @JvmStatic
+            fun openLogs(): Request = OpenLogs
+
+            @JvmStatic
+            fun openSettings(): Request = OpenSettings
+
+            @JvmStatic
+            fun openAbout(): Request = OpenAbout
+
+            @JvmStatic
+            fun setMode(mode: TunnelState.Mode): Request = SetMode(mode)
+        }
     }
 
     private val binding = DesignMainBinding
@@ -34,6 +61,8 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
     private val trafficHistory = ArrayDeque<Float>()
     private var lastForwardedBytes: Long? = null
     private var lastRunningState: Boolean? = null
+    private var currentMode: TunnelState.Mode? = null
+    private var updatingModeToggle = false
 
     override val root: View
         get() = binding.root
@@ -89,12 +118,25 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
 
     suspend fun setMode(mode: TunnelState.Mode) {
         withContext(Dispatchers.Main) {
+            currentMode = mode
+
             binding.mode = when (mode) {
                 TunnelState.Mode.Direct -> context.getString(R.string.direct_mode)
                 TunnelState.Mode.Global -> context.getString(R.string.global_mode)
                 TunnelState.Mode.Rule -> context.getString(R.string.rule_mode)
                 else -> context.getString(R.string.rule_mode)
             }
+
+            val buttonId = when (mode) {
+                TunnelState.Mode.Direct -> binding.modeDirectButton.id
+                TunnelState.Mode.Global -> binding.modeGlobalButton.id
+                TunnelState.Mode.Rule -> binding.modeRuleButton.id
+                else -> binding.modeRuleButton.id
+            }
+
+            updatingModeToggle = true
+            binding.modeToggleGroup.check(buttonId)
+            updatingModeToggle = false
         }
     }
 
@@ -121,6 +163,23 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
 
         binding.colorClashStarted = context.resolveThemedColor(com.google.android.material.R.attr.colorPrimary)
         binding.colorClashStopped = context.resolveThemedColor(R.attr.colorClashStopped)
+
+        binding.modeToggleGroup.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked || updatingModeToggle) {
+                return@addOnButtonCheckedListener
+            }
+
+            val mode = when (checkedId) {
+                binding.modeDirectButton.id -> TunnelState.Mode.Direct
+                binding.modeGlobalButton.id -> TunnelState.Mode.Global
+                binding.modeRuleButton.id -> TunnelState.Mode.Rule
+                else -> return@addOnButtonCheckedListener
+            }
+
+            if (mode != currentMode) {
+                requests.trySend(Request.SetMode(mode))
+            }
+        }
 
         val defaultForwarded = context.getString(R.string.zero_traffic)
         binding.clashRunning = false
