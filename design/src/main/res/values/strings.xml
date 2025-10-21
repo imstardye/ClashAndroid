@@ -10,7 +10,7 @@
     <string name="format_traffic_forwarded">%s Forwarded</string>
 
     <string name="dashboard_subtitle">Manage your traffic and connection at a glance</string>
-    <string name="dashboard_status_title">Clash status</string>
+    <string name="dashboard_status_title">netpulse状态</string>
     <string name="start_service">Start Service</string>
     <string name="stop_service">Stop Service</string>
     <string name="traffic_overview">Traffic Overview</string>
@@ -31,7 +31,6 @@
     <string name="quick_actions">Quick Actions</string>
     <string name="view_logs">Inspect runtime logs</string>
     <string name="open_settings">Adjust preferences</string>
-    <string name="get_help">Read usage guide</string>
     <string name="about_app">Learn about NetPulse</string>
     <string name="accessibility_traffic_chart">Traffic trend chart. %1$s.</string>
     <string name="zero_traffic">0 Bytes</string>
@@ -48,7 +47,6 @@
 
     <string name="logs">Logs</string>
     <string name="settings">Settings</string>
-    <string name="help">Help</string>
     <string name="about">About</string>
 
     <string name="copied">Copied</string>
@@ -236,22 +234,8 @@
     <string name="import_from_clipboard">Import from Clipboard</string>
     <string name="export_to_clipboard">Export to Clipboard</string>
 
-    <string name="clash_meta_for_android">NetPulse</string>
-
-    <string name="document">Document</string>
-    <string name="feedback">Feedback</string>
-    <string name="sources">Sources</string>
-    <string name="donate">Donate</string>
-    <string name="clash_wiki">Clash Wiki</string>
-    <string name="github_issues">Github Issues</string>
-    <string name="google_play">Google Play</string>
-    <string name="clash_meta_core">Clash Meta Core</string>
-    <string name="clash_wiki_url" translatable="false">https://github.com/Dreamacro/clash/wiki</string>
     <string name="meta_github_url" translatable="false">https://github.com/MetaCubeX/ClashMetaForAndroid</string>
-    <string name="clash_meta_core_url" translatable="false">https://github.com/MetaCubeX/Clash.Meta</string>
-
     <string name="tips_properties"><![CDATA[Accept Only <strong>Clash Config</strong>(including <strong>Proxy</strong>/<strong>Rules</strong>)]]></string>
-    <string name="tips_help"><![CDATA[Clash Meta for Android is a <strong>freeware</strong> and we do <strong>NOT</strong> provide any service for it]]></string>
 
     <string name="google_play_url" translatable="false">https://play.google.com/store/apps/details?id=com.github.kr328.clash</string>
 
@@ -321,17 +305,20 @@
 
     <string name="mode_switch_tips">Valid only for current session</string>
 
-    <string name="clash_meta_wiki">Clash Meta Wiki</string>
-    <string name="clash_meta_wiki_url" translatable="false">https://wiki.metacubex.one</string>
-
     <string name="meta_features">Meta Features</string>
     <string name="unified_delay">Unified Delay</string>
     <string name="geodata_mode">Geodata Mode</string>
     <string name="tcp_concurrent">TCP Concurrent</string>
     <string name="find_process_mode">Find Process Mode</string>
+    <string name="script_mode">Script Mode</string>
 
+    <string name="sniffing">Sniffer Mode</string>
+    <string name="sniff">Sniff</string>
     <string name="sniffer_setting">Sniffer Setting</string>
     <string name="sniffer">Sniffer</string>
+    <string name="disable_sniffer">Disable Sniffer</string>
+    <string name="sniffer_config">Load Sniffer From Config</string>
+    <string name="sniffer_override">Override Sniffer Config</string>
     <string name="force_dns_mapping">Force DNS Mapping</string>
     <string name="parse_pure_ip">Parse Pure IP</string>
     <string name="override_destination">Override Destination</string>
@@ -354,6 +341,9 @@
     <string name="mmdb_url" translatable="false">https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/country.mmdb</string>
     <string name="geosite_url" translatable="false">https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat</string>
     <string name="geox_files" >Geo Files</string>
+    <string name="port_whitelist">Port Whitelist</string>
+    <string name="sideload_geoip">Sideload GEOIP</string>
+    <string name="sideload_geoip_summary">External GEOIP database</string>
     <string name="import_geoip_file">Import GeoIP Database</string>
     <string name="import_geosite_file">Import GeoSite Database</string>
     <string name="import_country_file">Import Country Database</string>

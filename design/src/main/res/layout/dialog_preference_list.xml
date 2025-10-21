@@ -53,7 +53,7 @@
 
             <Button
                 android:id="@+id/reset_view"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Clash.Button.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -70,7 +70,7 @@
 
             <Button
                 android:id="@+id/cancel_view"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Clash.Button.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -79,7 +79,7 @@
 
             <Button
                 android:id="@+id/ok_view"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.Clash.Button.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"

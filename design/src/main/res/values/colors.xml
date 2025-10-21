@@ -1,14 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_clash_light">#1e4376</color>
-    <color name="color_clash_dark">#1976d2</color>
-    <color name="color_system_ui_overlay">#50000000</color>
-    <color name="color_light_background">#FFFAFAFA</color>
-    <color name="color_dark_background">#FF121212</color>
-    <color name="color_dark_surface">#FF202020</color>
-    <color name="color_light_clash_stopped">#FF808080</color>
-    <color name="color_light_control_disabled">#FFD3D3D3</color>
-    <color name="color_dark_control_disabled">#FF808080</color>
+    <color name="color_clash_light">#4F5CFF</color>
+    <color name="color_clash_dark">#3D4AE0</color>
+    <color name="color_system_ui_overlay">#33000000</color>
+    <color name="color_light_background">#FFF6F7FD</color>
+    <color name="color_dark_background">#FF0C1323</color>
+    <color name="color_dark_surface">#FF161F33</color>
+    <color name="color_light_clash_stopped">#FF65709A</color>
+    <color name="color_light_control_disabled">#FFD8DDF3</color>
+    <color name="color_dark_control_disabled">#FF3A4563</color>
     <color name="color_error">#FFB00020</color>
-    <color name="main_status_button_stroke_running">#FFFFFFFF</color>
+    <color name="main_status_button_stroke_running">#99FFFFFF</color>
+    <color name="color_status_button_start_background">#FFFFFFFF</color>
+    <color name="color_status_button_start_foreground">#3D4AE0</color>
+    <color name="color_status_button_stop_background">#323FDD</color>
+    <color name="color_surface_card">#FFFFFFFF</color>
+    <color name="color_surface_container">#FFF1F3FF</color>
+    <color name="color_surface_ripple">#1A000000</color>
+    <color name="color_surface_stroke">#19334874</color>
 </resources>

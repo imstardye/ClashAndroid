@@ -13,9 +13,6 @@
     <string name="tun_stack_system">Hệ thống</string>
     <string name="application_name_alpha">NetPulse</string>
     <string name="application_name_meta">NetPulse</string>
-    <string name="clash_meta_core">Clash Meta Core</string>
-    <string name="clash_meta_for_android">NetPulse</string>
-    <string name="clash_meta_wiki">Clash Meta Wiki</string>
     <string name="launch_name_alpha">NetPulse</string>
     <string name="launch_name_meta">NetPulse</string>
     <string name="_new">Mới</string>
@@ -73,9 +70,7 @@
     <string name="dns">DNS</string>
     <string name="dns_hijacking">Định tuyến qua DNS</string>
     <string name="dns_hijacking_summary">Xử lý tất cả gói DNS</string>
-    <string name="document">Tài liệu</string>
     <string name="domain_fallback">Dự phòng miền</string>
-    <string name="donate">Quyên góp</string>
     <string name="dont_modify">Chưa sửa đổi</string>
     <string name="duplicate">Tạo bản sao</string>
     <string name="edit">Sửa</string>
@@ -92,7 +87,6 @@
     <string name="fakeip">Fake-IP thành ánh xạ miền</string>
     <string name="fakeip_filter">Bộ lọc Fake-IP</string>
     <string name="fallback">Máy chủ tên dự phòng</string>
-    <string name="feedback">Phản hồi</string>
     <string name="file">Tệp</string>
     <string name="file_exported">Tệp đã xuất</string>
     <string name="file_name">Tên tệp</string>
@@ -119,10 +113,8 @@
     <string name="general">Chung</string>
     <string name="geoip_fallback">Dự phòng GeoIP</string>
     <string name="geoip_fallback_code">Mã dự phòng GeoIP</string>
-    <string name="github_issues">Sự cố trên Github</string>
     <string name="github_releases">Bản phát hành trên Github</string>
     <string name="global_mode">Chế độ toàn cầu</string>
-    <string name="help">Trợ giúp</string>
     <string name="history">Lịch sử</string>
     <string name="hosts">Hosts</string>
     <string name="http">HTTP</string>
@@ -210,14 +202,12 @@
     <string name="single">Đơn</string>
     <string name="socks_port">Cổng Socks</string>
     <string name="sort">Sắp xếp theo</string>
-    <string name="sources">Nguồn</string>
     <string name="stopped">Đã ngắt kết nối</string>
     <string name="strategy">Strategy</string>
     <string name="system_apps">Ứng dụng hệ thống</string>
     <string name="system_proxy">Proxy hệ thống</string>
     <string name="system_proxy_summary">Đính kèm proxy,http vào hệ thống Vpn</string>
     <string name="tap_to_start">Chạm để kết nối</string>
-    <string name="tips_help">Clash Meta là một phần mềm miễn phí và chúng tôi KHÔNG cung cấp bất kỳ dịch vụ trả phí nào cho nó</string>
     <string name="tips_properties">Chỉ chấp nhận cấu hình Clash bao gồm Proxy và Quy tắc</string>
     <string name="tproxy_port">Cổng TProxy</string>
     <string name="unable_to_start_vpn">Không thể khởi động thành phần VPN</string>

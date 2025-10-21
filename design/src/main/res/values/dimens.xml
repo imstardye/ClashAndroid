@@ -11,6 +11,11 @@
     <!-- Surface -->
     <dimen name="surface_landscape_min_width">500dp</dimen>
 
+    <!-- Shape -->
+    <dimen name="shape_corner_small">12dp</dimen>
+    <dimen name="shape_corner_medium">18dp</dimen>
+    <dimen name="shape_corner_large">24dp</dimen>
+
     <!--  Toolbar  -->
     <dimen name="toolbar_height">56dp</dimen>
     <dimen name="toolbar_elevation">5dp</dimen>
@@ -45,8 +50,8 @@
     <dimen name="item_midden_margin">10dp</dimen>
 
     <!-- Large Card -->
-    <dimen name="large_action_card_radius">6dp</dimen>
-    <dimen name="large_action_card_elevation">4dp</dimen>
+    <dimen name="large_action_card_radius">24dp</dimen>
+    <dimen name="large_action_card_elevation">8dp</dimen>
     <dimen name="large_action_card_min_height">78dp</dimen>
 
     <!-- Tips -->
@@ -83,7 +88,7 @@
     <dimen name="proxy_text_margin_grid3">5dp</dimen>
     <dimen name="proxy_text_size">12sp</dimen>
     <dimen name="proxy_text_size_grid3">11sp</dimen>
-    <dimen name="proxy_card_radius">5dp</dimen>
+    <dimen name="proxy_card_radius">16dp</dimen>
     <dimen name="proxy_card_offset">0dp</dimen>
 
     <!-- Properties Design -->
