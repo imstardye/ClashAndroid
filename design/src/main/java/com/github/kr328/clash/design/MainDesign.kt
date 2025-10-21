@@ -66,14 +66,14 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
             lastForwardedBytes = totalBytes
 
             if (previous == null || !binding.clashRunning) {
-                binding.trafficSpeed = context.getString(R.string.traffic_speed_idle)
+                binding.trafficSpeedText = context.getString(R.string.traffic_speed_idle)
                 if (previous == null && trafficHistory.isEmpty()) {
                     binding.hasTrafficHistory = false
                     binding.trafficChart.setSamples(emptyList())
                 }
             } else {
                 val delta = max(totalBytes - previous, 0L)
-                binding.trafficSpeed = context.getString(
+                binding.trafficSpeedText = context.getString(
                     R.string.traffic_speed,
                     Formatter.formatShortFileSize(context, delta)
                 )
@@ -81,7 +81,10 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
             }
 
             binding.trafficChart.contentDescription =
-                context.getString(R.string.accessibility_traffic_chart, binding.trafficSpeed)
+                context.getString(
+                    R.string.accessibility_traffic_chart,
+                    binding.trafficSpeedText ?: context.getString(R.string.traffic_speed_idle)
+                )
         }
     }
 
@@ -124,11 +127,14 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         binding.clashRunning = false
         binding.forwarded = defaultForwarded
         binding.forwardedLabel = context.getString(R.string.traffic_total_label, defaultForwarded)
-        binding.trafficSpeed = context.getString(R.string.traffic_speed_idle)
+        binding.trafficSpeedText = context.getString(R.string.traffic_speed_idle)
         binding.hasTrafficHistory = false
         binding.trafficChart.setSamples(emptyList())
         binding.trafficChart.contentDescription =
-            context.getString(R.string.accessibility_traffic_chart, binding.trafficSpeed)
+            context.getString(
+                R.string.accessibility_traffic_chart,
+                binding.trafficSpeedText ?: context.getString(R.string.traffic_speed_idle)
+            )
         lastRunningState = binding.clashRunning
     }
 
@@ -141,7 +147,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         lastForwardedBytes = null
         binding.hasTrafficHistory = false
         binding.trafficChart.setSamples(emptyList())
-        binding.trafficSpeed = context.getString(R.string.traffic_speed_idle)
+        binding.trafficSpeedText = context.getString(R.string.traffic_speed_idle)
 
         if (clearForwarded) {
             binding.forwarded = context.getString(R.string.zero_traffic)
@@ -150,7 +156,10 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         val forwardedText = binding.forwarded ?: context.getString(R.string.zero_traffic)
         binding.forwardedLabel = context.getString(R.string.traffic_total_label, forwardedText)
         binding.trafficChart.contentDescription =
-            context.getString(R.string.accessibility_traffic_chart, binding.trafficSpeed)
+            context.getString(
+                R.string.accessibility_traffic_chart,
+                binding.trafficSpeedText ?: context.getString(R.string.traffic_speed_idle)
+            )
     }
 
     private fun addTrafficSample(deltaBytes: Long) {

@@ -30,7 +30,7 @@
             name="hasProviders"
             type="boolean" />
         <variable
-            name="trafficSpeed"
+            name="trafficSpeedText"
             type="String" />
         <variable
             name="hasTrafficHistory"
@@ -206,7 +206,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/main_card_item_spacing"
-                                android:text='@{trafficSpeed}'
+                                android:text='@{trafficSpeedText}'
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
 
                             <FrameLayout
