@@ -68,8 +68,6 @@ class MainActivity : BaseActivity<MainDesign>() {
                         }
                         MainDesign.Request.OpenSettings ->
                             startActivity(SettingsActivity::class.intent)
-                        MainDesign.Request.OpenHelp ->
-                            startActivity(HelpActivity::class.intent)
                         MainDesign.Request.OpenAbout ->
                             design.showAbout(queryAppVersionName())
                     }

@@ -25,6 +25,13 @@
         <item name="colorControlActivated">?attr/colorPrimary</item>
         <item name="android:textColor">?attr/colorControlNormal</item>
         <item name="android:windowBackground">@color/color_light_background</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Clash.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Clash.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Clash.Large</item>
+        <item name="materialButtonStyle">@style/Widget.Clash.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Clash.Button.Outlined</item>
+        <item name="materialCardViewStyle">@style/Widget.Clash.CardView</item>
     </style>
 
     <style name="AppFullScreenDialogDarkBase" parent="Theme.MaterialComponents.Dialog">
@@ -48,6 +55,13 @@
         <item name="colorControlActivated">?attr/colorPrimary</item>
         <item name="colorClashStopped">?attr/colorSurface</item>
         <item name="android:textColor">?attr/colorControlNormal</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Clash.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Clash.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Clash.Large</item>
+        <item name="materialButtonStyle">@style/Widget.Clash.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Clash.Button.Outlined</item>
+        <item name="materialCardViewStyle">@style/Widget.Clash.CardView</item>
     </style>
 
     <style name="AppFullScreenDialogLight" parent="AppFullScreenDialogLightBase">
@@ -79,6 +93,13 @@
         <item name="android:textColor">?attr/colorControlNormal</item>
 
         <item name="bottomSheetStyle">@style/AppBottomSheetStyle</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Clash.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Clash.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Clash.Large</item>
+        <item name="materialButtonStyle">@style/Widget.Clash.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Clash.Button.Outlined</item>
+        <item name="materialCardViewStyle">@style/Widget.Clash.CardView</item>
     </style>
 
     <style name="AppBottomSheetDialogDarkBase" parent="Theme.MaterialComponents.BottomSheetDialog">
@@ -100,6 +121,13 @@
         <item name="android:textColor">?attr/colorControlNormal</item>
 
         <item name="bottomSheetStyle">@style/AppBottomSheetStyle</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Clash.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Clash.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Clash.Large</item>
+        <item name="materialButtonStyle">@style/Widget.Clash.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Clash.Button.Outlined</item>
+        <item name="materialCardViewStyle">@style/Widget.Clash.CardView</item>
     </style>
 
     <style name="AppBottomSheetDialogLight" parent="AppBottomSheetDialogLightBase">
@@ -130,6 +158,14 @@
         <item name="colorLogo">?attr/colorControlActivated</item>
         <item name="android:textColor">?attr/colorControlNormal</item>
 
+        <item name="colorSurface">@color/color_surface_card</item>
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Clash.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Clash.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Clash.Large</item>
+        <item name="materialButtonStyle">@style/Widget.Clash.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Clash.Button.Outlined</item>
+        <item name="materialCardViewStyle">@style/Widget.Clash.CardView</item>
+
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogLight</item>
         <item name="fullScreenDialogTheme">@style/AppFullScreenDialogLight</item>
     </style>
@@ -152,6 +188,13 @@
         <item name="colorClashStopped">?attr/colorSurface</item>
         <item name="colorLogo">?attr/colorControlNormal</item>
         <item name="android:textColor">?attr/colorControlNormal</item>
+
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.Clash.Small</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.Clash.Medium</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.Clash.Large</item>
+        <item name="materialButtonStyle">@style/Widget.Clash.Button</item>
+        <item name="materialButtonOutlinedStyle">@style/Widget.Clash.Button.Outlined</item>
+        <item name="materialCardViewStyle">@style/Widget.Clash.CardView</item>
 
         <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogDark</item>
         <item name="fullScreenDialogTheme">@style/AppFullScreenDialogDark</item>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_surface_card">#FF1C2740</color>
+    <color name="color_surface_container">#FF152033</color>
+    <color name="color_surface_ripple">#33FFFFFF</color>
+    <color name="color_surface_stroke">#334F6B9F</color>
+    <color name="color_status_button_start_background">#FF2D3B60</color>
+    <color name="color_status_button_start_foreground">#FFD9E0FF</color>
+    <color name="color_status_button_stop_background">#FF2E3BD8</color>
+</resources>
