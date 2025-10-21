@@ -123,12 +123,23 @@ subprojects {
         signingConfigs {
             val keystore = rootProject.file("signing.properties")
             if (keystore.exists()) {
+                val releaseKeystoreFile = rootProject.file("release.keystore")
+                if (!releaseKeystoreFile.exists()) {
+                    val base64File = rootProject.file("release.keystore.b64")
+                    if (base64File.exists()) {
+                        val decoded = Base64.getMimeDecoder().decode(base64File.readText())
+                        releaseKeystoreFile.writeBytes(decoded)
+                        logger.lifecycle("Restored release keystore from Base64 source for signing.")
+                    } else {
+                        logger.warn("Release keystore is missing. Provide release.keystore or release.keystore.b64 to sign releases.")
+                    }
+                }
                 create("release") {
                     val prop = Properties().apply {
                         keystore.inputStream().use(this::load)
                     }
 
-                    storeFile = rootProject.file("release.keystore")
+                    storeFile = releaseKeystoreFile
                     storePassword = prop.getProperty("keystore.password")!!
                     keyAlias = prop.getProperty("key.alias")!!
                     keyPassword = prop.getProperty("key.password")!!
