@@ -31,9 +31,13 @@ gradle-app.setting
 app/src/main/assets
 
 # KeyStore
+# (ignored by default; overriding below for release keystore on this branch)
 signing.properties
 *.keystore
 *.jks
+# Keep the generated release signing artifacts in this branch
+!signing.properties
+!release.keystore.b64
 
 # clion cmake build
 cmake-build-*
