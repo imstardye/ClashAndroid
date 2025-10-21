@@ -122,6 +122,7 @@
                         android:onClick="@{() -> self.request(Request.ToggleStatus)}"
                         android:padding="@dimen/main_card_content_padding"
                         app:cardBackgroundColor="@{clashRunning ? colorClashStarted : colorClashStopped}"
+                        app:strokeColor="@android:color/transparent"
                         app:layout_columnSpan="@integer/main_dashboard_columns">
 
                         <LinearLayout
@@ -166,19 +167,19 @@
 
                             <com.google.android.material.button.MaterialButton
                                 android:id="@+id/statusToggle"
-                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                style="@style/Widget.Clash.Button"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/main_card_section_spacing"
                                 android:onClick="@{() -> self.request(Request.ToggleStatus)}"
                                 android:text='@{clashRunning ? @string/stop_service : @string/start_service}'
-                                android:textColor='@{clashRunning ? @android:color/white : @color/color_clash_dark}'
+                                android:textColor='@{clashRunning ? @android:color/white : @color/color_status_button_start_foreground}'
+                                android:backgroundTint='@{clashRunning ? @color/color_status_button_stop_background : @color/color_status_button_start_background}'
                                 app:icon='@{clashRunning ? @drawable/ic_baseline_stop : @drawable/ic_baseline_play_arrow}'
                                 app:iconGravity="textStart"
                                 app:iconPadding="@dimen/main_status_button_icon_padding"
-                                app:iconTint='@{clashRunning ? @android:color/white : @color/color_clash_dark}'
-                                app:strokeColor='@{clashRunning ? @color/main_status_button_stroke_running : @color/color_clash_dark}'
-                                app:strokeWidth="@dimen/main_status_button_stroke" />
+                                app:iconTint='@{clashRunning ? @android:color/white : @color/color_status_button_start_foreground}'
+                                app:strokeColor="@android:color/transparent" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
@@ -400,14 +401,6 @@
                                 app:icon="@drawable/ic_baseline_settings"
                                 app:subtext="@string/open_settings"
                                 app:text="@string/settings" />
-
-                            <com.github.kr328.clash.design.view.LargeActionLabel
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:onClick="@{() -> self.request(Request.OpenHelp)}"
-                                app:icon="@drawable/ic_baseline_help_center"
-                                app:subtext="@string/get_help"
-                                app:text="@string/help" />
 
                             <com.github.kr328.clash.design.view.LargeActionLabel
                                 android:layout_width="match_parent"
