@@ -79,7 +79,7 @@ object ProfileProcessor {
                                 val versionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName
                                 val request = Request.Builder()
                                     .url(snapshot.source)
-                                    .header("User-Agent", "ClashMetaForAndroid/$versionName")
+                                    .header("User-Agent", "NetPulse/$versionName")
                                     .build()
 
                                 client.newCall(request).execute().use { response ->
