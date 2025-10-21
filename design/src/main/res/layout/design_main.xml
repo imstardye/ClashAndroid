@@ -109,7 +109,7 @@
                     android:focusable="true"
                     android:foreground="?attr/selectableItemBackground"
                     android:onClick="@{() -> self.request(Request.ToggleStatus)}"
-                    android:padding="@dimen/main_card_content_padding"
+                    app:contentPadding="@dimen/main_card_content_padding"
                     app:strokeColor="@android:color/transparent"
                     app:cardBackgroundColor="@{clashRunning ? colorClashStarted : colorClashStopped}">
 
@@ -176,7 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/main_dashboard_item_spacing"
-                    android:padding="@dimen/main_card_content_padding">
+                    app:contentPadding="@dimen/main_card_content_padding">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -239,7 +239,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/main_dashboard_item_spacing"
-                    android:padding="@dimen/main_card_content_padding">
+                    app:contentPadding="@dimen/main_card_content_padding">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -253,6 +253,7 @@
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
 
                         <LinearLayout
+                            android:id="@+id/currentModeRow"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/main_card_item_spacing"
@@ -273,6 +274,41 @@
                                 android:text='@{mode}'
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
                         </LinearLayout>
+
+                        <com.google.android.material.button.MaterialButtonToggleGroup
+                            android:id="@+id/modeToggleGroup"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/main_card_item_spacing"
+                            app:selectionRequired="true"
+                            app:singleSelection="true">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/modeDirectButton"
+                                style="@style/Widget.Clash.Button.Outlined"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/main_card_item_spacing"
+                                android:layout_weight="1"
+                                android:text="@string/direct_mode" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/modeRuleButton"
+                                style="@style/Widget.Clash.Button.Outlined"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/main_card_item_spacing"
+                                android:layout_weight="1"
+                                android:text="@string/rule_mode" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/modeGlobalButton"
+                                style="@style/Widget.Clash.Button.Outlined"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/global_mode" />
+                        </com.google.android.material.button.MaterialButtonToggleGroup>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -358,7 +394,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/main_dashboard_item_spacing"
                     android:layout_marginBottom="@dimen/main_dashboard_item_spacing"
-                    android:padding="@dimen/main_card_content_padding">
+                    app:contentPadding="@dimen/main_card_content_padding">
 
                     <LinearLayout
                         android:layout_width="match_parent"
