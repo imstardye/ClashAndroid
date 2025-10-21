@@ -119,7 +119,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:foreground="?attr/selectableItemBackground"
-                        android:onClick="@{() -> self.request(Request.ToggleStatus)}"
+                        android:onClick="@{() -> self.request(Request.toggleStatus())}"
                         app:contentPadding="@dimen/main_card_content_padding"
                         app:cardBackgroundColor="@{clashRunning ? colorClashStarted : colorClashStopped}"
                         app:strokeColor="@android:color/transparent"
@@ -171,7 +171,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/main_card_section_spacing"
-                                android:onClick="@{() -> self.request(Request.ToggleStatus)}"
+                                android:onClick="@{() -> self.request(Request.toggleStatus())}"
                                 android:text='@{clashRunning ? @string/stop_service : @string/start_service}'
                                 android:textColor='@{clashRunning ? @android:color/white : @color/color_status_button_start_foreground}'
                                 android:backgroundTint='@{clashRunning ? @color/color_status_button_stop_background : @color/color_status_button_start_background}'
@@ -377,7 +377,7 @@
                             <com.github.kr328.clash.design.view.LargeActionLabel
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{() -> self.request(Request.OpenProxy)}"
+                                android:onClick="@{() -> self.request(Request.openProxy())}"
                                 app:icon="@drawable/ic_baseline_apps"
                                 app:subtext="@string/manage_proxy"
                                 app:text="@string/proxy" />
@@ -385,7 +385,7 @@
                             <com.github.kr328.clash.design.view.LargeActionLabel
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{() -> self.request(Request.OpenProfiles)}"
+                                android:onClick="@{() -> self.request(Request.openProfiles())}"
                                 app:icon="@drawable/ic_baseline_view_list"
                                 app:subtext='@{profileName != null ? @string/manage_profiles : @string/not_selected}'
                                 app:text="@string/profiles" />
@@ -393,7 +393,7 @@
                             <com.github.kr328.clash.design.view.LargeActionLabel
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{() -> self.request(Request.OpenProviders)}"
+                                android:onClick="@{() -> self.request(Request.openProviders())}"
                                 android:visibility="@{hasProviders ? View.VISIBLE : View.GONE}"
                                 app:icon="@drawable/ic_baseline_swap_vertical_circle"
                                 app:subtext="@string/manage_providers"
@@ -425,7 +425,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/main_card_item_spacing"
-                                android:onClick="@{() -> self.request(Request.OpenLogs)}"
+                                android:onClick="@{() -> self.request(Request.openLogs())}"
                                 app:icon="@drawable/ic_baseline_assignment"
                                 app:subtext="@string/view_logs"
                                 app:text="@string/logs" />
@@ -433,7 +433,7 @@
                             <com.github.kr328.clash.design.view.LargeActionLabel
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{() -> self.request(Request.OpenSettings)}"
+                                android:onClick="@{() -> self.request(Request.openSettings())}"
                                 app:icon="@drawable/ic_baseline_settings"
                                 app:subtext="@string/open_settings"
                                 app:text="@string/settings" />
@@ -441,7 +441,7 @@
                             <com.github.kr328.clash.design.view.LargeActionLabel
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:onClick="@{() -> self.request(Request.OpenAbout)}"
+                                android:onClick="@{() -> self.request(Request.openAbout())}"
                                 app:icon="@drawable/ic_baseline_info"
                                 app:subtext="@string/about_app"
                                 app:text="@string/about" />

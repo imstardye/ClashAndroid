@@ -27,6 +27,32 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         object OpenSettings : Request()
         object OpenAbout : Request()
         data class SetMode(val mode: TunnelState.Mode) : Request()
+
+        companion object {
+            @JvmStatic
+            fun toggleStatus(): Request = ToggleStatus
+
+            @JvmStatic
+            fun openProxy(): Request = OpenProxy
+
+            @JvmStatic
+            fun openProfiles(): Request = OpenProfiles
+
+            @JvmStatic
+            fun openProviders(): Request = OpenProviders
+
+            @JvmStatic
+            fun openLogs(): Request = OpenLogs
+
+            @JvmStatic
+            fun openSettings(): Request = OpenSettings
+
+            @JvmStatic
+            fun openAbout(): Request = OpenAbout
+
+            @JvmStatic
+            fun setMode(mode: TunnelState.Mode): Request = SetMode(mode)
+        }
     }
 
     private val binding = DesignMainBinding
