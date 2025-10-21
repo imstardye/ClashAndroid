@@ -310,9 +310,15 @@
     <string name="geodata_mode">Geodata Mode</string>
     <string name="tcp_concurrent">TCP Concurrent</string>
     <string name="find_process_mode">Find Process Mode</string>
+    <string name="script_mode">Script Mode</string>
 
+    <string name="sniffing">Sniffer Mode</string>
+    <string name="sniff">Sniff</string>
     <string name="sniffer_setting">Sniffer Setting</string>
     <string name="sniffer">Sniffer</string>
+    <string name="disable_sniffer">Disable Sniffer</string>
+    <string name="sniffer_config">Load Sniffer From Config</string>
+    <string name="sniffer_override">Override Sniffer Config</string>
     <string name="force_dns_mapping">Force DNS Mapping</string>
     <string name="parse_pure_ip">Parse Pure IP</string>
     <string name="override_destination">Override Destination</string>
@@ -335,6 +341,9 @@
     <string name="mmdb_url" translatable="false">https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/country.mmdb</string>
     <string name="geosite_url" translatable="false">https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat</string>
     <string name="geox_files" >Geo Files</string>
+    <string name="port_whitelist">Port Whitelist</string>
+    <string name="sideload_geoip">Sideload GEOIP</string>
+    <string name="sideload_geoip_summary">External GEOIP database</string>
     <string name="import_geoip_file">Import GeoIP Database</string>
     <string name="import_geosite_file">Import GeoSite Database</string>
     <string name="import_country_file">Import Country Database</string>
