@@ -9,6 +9,33 @@
     <string name="running">Running</string>
     <string name="format_traffic_forwarded">%s Forwarded</string>
 
+    <string name="dashboard_subtitle">Manage your traffic and connection at a glance</string>
+    <string name="dashboard_status_title">Clash status</string>
+    <string name="start_service">Start Service</string>
+    <string name="stop_service">Stop Service</string>
+    <string name="traffic_overview">Traffic Overview</string>
+    <string name="traffic_speed_idle">Waiting for traffic…</string>
+    <string name="traffic_speed">Current speed · %1$s/s</string>
+    <string name="traffic_total_label">Total forwarded · %1$s</string>
+    <string name="traffic_history_hint">History is based on recent samples collected every second.</string>
+    <string name="traffic_chart_empty">Traffic data will appear once forwarding starts.</string>
+    <string name="connection_overview">Connection</string>
+    <string name="current_mode_label">Current mode</string>
+    <string name="active_profile_label">Active profile</string>
+    <string name="providers_label">Providers</string>
+    <string name="providers_available">Providers ready</string>
+    <string name="providers_unavailable">No providers configured</string>
+    <string name="manage_proxy">Open proxy dashboard</string>
+    <string name="manage_profiles">Switch or update profiles</string>
+    <string name="manage_providers">View subscription providers</string>
+    <string name="quick_actions">Quick Actions</string>
+    <string name="view_logs">Inspect runtime logs</string>
+    <string name="open_settings">Adjust preferences</string>
+    <string name="get_help">Read usage guide</string>
+    <string name="about_app">Learn about NetPulse</string>
+    <string name="accessibility_traffic_chart">Traffic trend chart. %1$s.</string>
+    <string name="zero_traffic">0 Bytes</string>
+
     <string name="proxy">Proxy</string>
     <string name="direct_mode">Direct Mode</string>
     <string name="rule_mode">Rule Mode</string>
