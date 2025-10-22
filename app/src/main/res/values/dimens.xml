@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="widget_quick_toggle_padding">18dp</dimen>
+    <dimen name="widget_quick_toggle_corner_radius">22dp</dimen>
+    <dimen name="widget_quick_toggle_button_size">64dp</dimen>
+    <dimen name="widget_quick_toggle_button_touch_padding">6dp</dimen>
+    <dimen name="widget_quick_toggle_button_icon_size">28dp</dimen>
+    <dimen name="widget_quick_toggle_section_spacing">14dp</dimen>
+    <dimen name="widget_quick_toggle_metrics_spacing">10dp</dimen>
+    <dimen name="widget_quick_toggle_metric_label_size">12sp</dimen>
+    <dimen name="widget_quick_toggle_metric_value_size">18sp</dimen>
+    <dimen name="widget_quick_toggle_status_text_size">13sp</dimen>
+    <dimen name="widget_quick_toggle_divider_width">1dp</dimen>
+</resources>
