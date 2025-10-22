@@ -6,5 +6,6 @@
     android:minResizeHeight="110dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/widget_quick_toggle"
+    android:previewLayout="@layout/widget_quick_toggle"
     android:resizeMode="horizontal|vertical"
     android:widgetCategory="home_screen" />

@@ -213,8 +213,7 @@
 
         <receiver
             android:name=".widget.QuickToggleWidgetProvider"
-            android:exported="false"
-            android:permission="${applicationId}.permission.RECEIVE_BROADCASTS">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
                 <action android:name="com.github.kr328.clash.widget.action.TOGGLE" />
