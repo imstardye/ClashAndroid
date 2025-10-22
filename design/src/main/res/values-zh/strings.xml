@@ -37,6 +37,7 @@
     <string name="format_profile_activated">%s 已激活</string>
     <string name="format_traffic_forwarded">%s 已转发</string>
     <string name="global_mode">全局模式</string>
+    <string name="global_mode_with_proxy">全局模式(%1$s)</string>
     <string name="hide_app_icon_title">隐藏应用图标</string>
     <string name="hide_app_icon_desc">可以在拨号盘输入 *#*#63878573#*#* 打开应用</string>
     <string name="history">历史</string>
