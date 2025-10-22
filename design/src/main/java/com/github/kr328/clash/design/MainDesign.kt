@@ -2,11 +2,15 @@ package com.github.kr328.clash.design
 
 import android.content.Context
 import android.text.format.Formatter
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.ListView
-import android.widget.SimpleAdapter
+import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.ListPopupWindow
+import androidx.core.view.isVisible
 import com.github.kr328.clash.core.model.Proxy
 import com.github.kr328.clash.core.model.ProxyGroup
 import com.github.kr328.clash.core.model.TunnelState
@@ -74,7 +78,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
     private var updatingModeToggle = false
     private var globalProxyItems: List<GlobalProxyItem> = emptyList()
     private var globalProxySelected: String? = null
-    private var globalProxyPopup: ListPopupWindow? = null
+    private val globalProxyAdapter = GlobalProxyDropdownAdapter()
 
     override val root: View
         get() = binding.root
@@ -133,6 +137,8 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
             currentMode = mode
 
             binding.mode = modeLabelFor(mode)
+            updateGlobalProxyDropdownState()
+            updateGlobalProxyDropdownSelection()
 
             val buttonId = when (mode) {
                 TunnelState.Mode.Direct -> binding.modeDirectButton.id
@@ -144,6 +150,12 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
             updatingModeToggle = true
             binding.modeToggleGroup.check(buttonId)
             updatingModeToggle = false
+
+            if (mode == TunnelState.Mode.Global) {
+                showGlobalProxyDropdownIfAvailable()
+            } else {
+                binding.globalProxyDropdown.dismissDropDown()
+            }
         }
     }
 
@@ -187,22 +199,31 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
                 requests.trySend(Request.SetMode(mode))
             }
 
-            if (mode == TunnelState.Mode.Global) {
-                binding.modeGlobalButton.post {
-                    if (binding.modeGlobalButton.isChecked) {
-                        showGlobalProxySelector(binding.modeGlobalButton)
-                    }
+        }
+
+        binding.globalProxyDropdown.apply {
+            setAdapter(globalProxyAdapter)
+            keyListener = null
+            setOnItemClickListener { _, _, position, _ ->
+                val item = globalProxyItems.getOrNull(position) ?: return@setOnItemClickListener
+                if (item.name != globalProxySelected) {
+                    requests.trySend(Request.SelectGlobalProxy(item.name))
+                }
+            }
+            setOnClickListener {
+                if (binding.globalProxyDropdownLayout.isEnabled) {
+                    showDropDown()
+                }
+            }
+            setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus && binding.globalProxyDropdownLayout.isEnabled) {
+                    showDropDown()
                 }
             }
         }
 
-        binding.modeGlobalButton.setOnClickListener { view ->
-            view.post {
-                if (binding.modeGlobalButton.isChecked) {
-                    showGlobalProxySelector(view)
-                }
-            }
-        }
+        updateGlobalProxyDropdownState()
+        updateGlobalProxyDropdownSelection()
 
         val defaultForwarded = context.getString(R.string.zero_traffic)
         binding.clashRunning = false
@@ -225,15 +246,19 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
 
     suspend fun setGlobalProxyGroup(group: ProxyGroup?) {
         withContext(Dispatchers.Main) {
-            globalProxyPopup?.dismiss()
-
             val proxies = group?.proxies.orEmpty()
 
             globalProxyItems = proxies.map { it.asGlobalProxyItem() }
             globalProxySelected = group?.now
+            globalProxyAdapter.notifyDataSetChanged()
+            updateGlobalProxyDropdownState()
+            updateGlobalProxyDropdownSelection()
 
             if (currentMode == TunnelState.Mode.Global) {
                 binding.mode = modeLabelFor(currentMode)
+                if (globalProxySelected.isNullOrBlank()) {
+                    showGlobalProxyDropdownIfAvailable()
+                }
             }
         }
     }
@@ -241,6 +266,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
     suspend fun setGlobalProxySelection(name: String) {
         withContext(Dispatchers.Main) {
             globalProxySelected = name
+            updateGlobalProxyDropdownSelection()
 
             if (currentMode == TunnelState.Mode.Global) {
                 binding.mode = modeLabelFor(currentMode)
@@ -248,75 +274,34 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         }
     }
 
-    private fun showGlobalProxySelector(anchor: View) {
-        if (globalProxyPopup?.isShowing == true) {
+    private fun updateGlobalProxyDropdownState() {
+        val hasProxies = globalProxyItems.isNotEmpty()
+        val isGlobalMode = currentMode == TunnelState.Mode.Global
+
+        binding.globalProxyDropdownLayout.isVisible = hasProxies
+        binding.globalProxyDropdownLayout.isEnabled = hasProxies && isGlobalMode
+        binding.globalProxyDropdown.isEnabled = hasProxies && isGlobalMode
+
+        if (!hasProxies) {
+            binding.globalProxyDropdown.dismissDropDown()
+        }
+    }
+
+    private fun updateGlobalProxyDropdownSelection() {
+        val selected = globalProxyItems.firstOrNull { it.name == globalProxySelected }
+        val display = selected?.displayTitle.orEmpty()
+
+        binding.globalProxyDropdown.setText(display, false)
+    }
+
+    private fun showGlobalProxyDropdownIfAvailable() {
+        if (!binding.globalProxyDropdownLayout.isEnabled || !binding.globalProxyDropdownLayout.isVisible) {
             return
         }
 
-        val proxies = globalProxyItems
-
-        if (proxies.isEmpty()) {
-            return
-        }
-
-        val adapterData = proxies.map { item ->
-            val primary = item.title.ifBlank { item.name }
-            val secondary = when {
-                item.subtitle.isNotBlank() -> item.subtitle
-                item.title.isNotBlank() && item.title != item.name && item.name.isNotBlank() -> item.name
-                else -> ""
-            }
-
-            hashMapOf(
-                KEY_TITLE to primary,
-                KEY_SUBTITLE to secondary,
-            )
-        }
-
-        val adapter = SimpleAdapter(
-            anchor.context,
-            adapterData,
-            android.R.layout.simple_list_item_2,
-            arrayOf(KEY_TITLE, KEY_SUBTITLE),
-            intArrayOf(android.R.id.text1, android.R.id.text2)
-        ).apply {
-            setViewBinder { view, data, _ ->
-                if (view.id == android.R.id.text2) {
-                    view.visibility = if ((data as? String).isNullOrEmpty()) View.GONE else View.VISIBLE
-                }
-                false
-            }
-        }
-
-        val popup = ListPopupWindow(anchor.context).apply {
-            setAdapter(adapter)
-            anchorView = anchor
-            isModal = true
-            inputMethodMode = ListPopupWindow.INPUT_METHOD_NOT_NEEDED
-            setOnItemClickListener { _, _, position, _ ->
-                requests.trySend(Request.SelectGlobalProxy(proxies[position].name))
-                dismiss()
-            }
-            setOnDismissListener {
-                if (globalProxyPopup === this) {
-                    globalProxyPopup = null
-                }
-            }
-
-            val anchorWidth = anchor.width
-            setContentWidth(if (anchorWidth > 0) anchorWidth else ListPopupWindow.WRAP_CONTENT)
-        }
-
-        globalProxyPopup = popup
-
-        popup.show()
-
-        popup.listView?.apply {
-            choiceMode = ListView.CHOICE_MODE_SINGLE
-            val selectedIndex = proxies.indexOfFirst { it.name == globalProxySelected }
-            if (selectedIndex >= 0) {
-                setItemChecked(selectedIndex, true)
-                setSelection(selectedIndex)
+        binding.globalProxyDropdown.post {
+            if (binding.globalProxyDropdownLayout.isEnabled && binding.globalProxyDropdownLayout.isVisible) {
+                binding.globalProxyDropdown.showDropDown()
             }
         }
     }
@@ -330,8 +315,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
             TunnelState.Mode.Direct -> context.getString(R.string.direct_mode)
             TunnelState.Mode.Global -> {
                 val selected = globalProxyItems.firstOrNull { it.name == globalProxySelected }
-                val display = selected?.title?.takeIf { it.isNotBlank() }
-                    ?: selected?.name?.takeIf { it.isNotBlank() }
+                val display = selected?.displayTitle?.takeIf { it.isNotBlank() }
                     ?: globalProxySelected
 
                 if (!display.isNullOrBlank()) {
@@ -349,7 +333,64 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         val name: String,
         val title: String,
         val subtitle: String,
-    )
+    ) {
+        val displayTitle: String
+            get() = title.takeIf { it.isNotBlank() } ?: name
+
+        val displaySubtitle: String
+            get() = when {
+                subtitle.isNotBlank() -> subtitle
+                title.isNotBlank() && title != name && name.isNotBlank() -> name
+                else -> ""
+            }
+    }
+
+    private inner class GlobalProxyDropdownAdapter : BaseAdapter(), Filterable {
+        override fun getCount(): Int = globalProxyItems.size
+
+        override fun getItem(position: Int): GlobalProxyItem = globalProxyItems[position]
+
+        override fun getItemId(position: Int): Long = position.toLong()
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val view = convertView as? TextView
+                ?: LayoutInflater.from(parent.context)
+                    .inflate(android.R.layout.simple_list_item_1, parent, false) as TextView
+            view.text = getItem(position).displayTitle
+            return view
+        }
+
+        override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+            val view = convertView ?: LayoutInflater.from(parent.context)
+                .inflate(R.layout.component_dropdown_item_two_line, parent, false)
+
+            val item = getItem(position)
+            val titleView = view.findViewById<TextView>(R.id.dropdownTitle)
+            val subtitleView = view.findViewById<TextView>(R.id.dropdownSubtitle)
+
+            titleView.text = item.displayTitle
+            val subtitleText = item.displaySubtitle
+            subtitleView.text = subtitleText
+            subtitleView.isVisible = subtitleText.isNotEmpty()
+
+            return view
+        }
+
+        override fun getFilter(): Filter {
+            return object : Filter() {
+                override fun performFiltering(constraint: CharSequence?): FilterResults {
+                    return FilterResults().apply {
+                        values = globalProxyItems
+                        count = globalProxyItems.size
+                    }
+                }
+
+                override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                    notifyDataSetChanged()
+                }
+            }
+        }
+    }
 
     private fun resetTrafficIndicators(clearForwarded: Boolean) {
         trafficHistory.clear()
@@ -386,7 +427,5 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
     private companion object {
         private const val TRAFFIC_HISTORY_LIMIT = 30
         private const val BYTES_IN_KIB = 1024f
-        private const val KEY_TITLE = "title"
-        private const val KEY_SUBTITLE = "subtitle"
     }
 }
