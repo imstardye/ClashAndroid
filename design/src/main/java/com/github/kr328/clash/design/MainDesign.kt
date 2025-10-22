@@ -3,7 +3,12 @@ package com.github.kr328.clash.design
 import android.content.Context
 import android.text.format.Formatter
 import android.view.View
+import android.widget.ListView
+import android.widget.SimpleAdapter
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.ListPopupWindow
+import com.github.kr328.clash.core.model.Proxy
+import com.github.kr328.clash.core.model.ProxyGroup
 import com.github.kr328.clash.core.model.TunnelState
 import com.github.kr328.clash.core.util.trafficTotal
 import com.github.kr328.clash.core.util.trafficTotalBytes
@@ -27,6 +32,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         object OpenSettings : Request()
         object OpenAbout : Request()
         data class SetMode(val mode: TunnelState.Mode) : Request()
+        data class SelectGlobalProxy(val name: String) : Request()
 
         companion object {
             @JvmStatic
@@ -52,6 +58,9 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
 
             @JvmStatic
             fun setMode(mode: TunnelState.Mode): Request = SetMode(mode)
+
+            @JvmStatic
+            fun selectGlobalProxy(name: String): Request = SelectGlobalProxy(name)
         }
     }
 
@@ -63,6 +72,9 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
     private var lastRunningState: Boolean? = null
     private var currentMode: TunnelState.Mode? = null
     private var updatingModeToggle = false
+    private var globalProxyItems: List<GlobalProxyItem> = emptyList()
+    private var globalProxySelected: String? = null
+    private var globalProxyPopup: ListPopupWindow? = null
 
     override val root: View
         get() = binding.root
@@ -120,12 +132,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         withContext(Dispatchers.Main) {
             currentMode = mode
 
-            binding.mode = when (mode) {
-                TunnelState.Mode.Direct -> context.getString(R.string.direct_mode)
-                TunnelState.Mode.Global -> context.getString(R.string.global_mode)
-                TunnelState.Mode.Rule -> context.getString(R.string.rule_mode)
-                else -> context.getString(R.string.rule_mode)
-            }
+            binding.mode = modeLabelFor(mode)
 
             val buttonId = when (mode) {
                 TunnelState.Mode.Direct -> binding.modeDirectButton.id
@@ -179,6 +186,22 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
             if (mode != currentMode) {
                 requests.trySend(Request.SetMode(mode))
             }
+
+            if (mode == TunnelState.Mode.Global) {
+                binding.modeGlobalButton.post {
+                    if (binding.modeGlobalButton.isChecked) {
+                        showGlobalProxySelector(binding.modeGlobalButton)
+                    }
+                }
+            }
+        }
+
+        binding.modeGlobalButton.setOnClickListener { view ->
+            view.post {
+                if (binding.modeGlobalButton.isChecked) {
+                    showGlobalProxySelector(view)
+                }
+            }
         }
 
         val defaultForwarded = context.getString(R.string.zero_traffic)
@@ -199,6 +222,134 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
     fun request(request: Request) {
         requests.trySend(request)
     }
+
+    suspend fun setGlobalProxyGroup(group: ProxyGroup?) {
+        withContext(Dispatchers.Main) {
+            globalProxyPopup?.dismiss()
+
+            val proxies = group?.proxies.orEmpty()
+
+            globalProxyItems = proxies.map { it.asGlobalProxyItem() }
+            globalProxySelected = group?.now
+
+            if (currentMode == TunnelState.Mode.Global) {
+                binding.mode = modeLabelFor(currentMode)
+            }
+        }
+    }
+
+    suspend fun setGlobalProxySelection(name: String) {
+        withContext(Dispatchers.Main) {
+            globalProxySelected = name
+
+            if (currentMode == TunnelState.Mode.Global) {
+                binding.mode = modeLabelFor(currentMode)
+            }
+        }
+    }
+
+    private fun showGlobalProxySelector(anchor: View) {
+        if (globalProxyPopup?.isShowing == true) {
+            return
+        }
+
+        val proxies = globalProxyItems
+
+        if (proxies.isEmpty()) {
+            return
+        }
+
+        val adapterData = proxies.map { item ->
+            val primary = item.title.ifBlank { item.name }
+            val secondary = when {
+                item.subtitle.isNotBlank() -> item.subtitle
+                item.title.isNotBlank() && item.title != item.name && item.name.isNotBlank() -> item.name
+                else -> ""
+            }
+
+            hashMapOf(
+                KEY_TITLE to primary,
+                KEY_SUBTITLE to secondary,
+            )
+        }
+
+        val adapter = SimpleAdapter(
+            anchor.context,
+            adapterData,
+            android.R.layout.simple_list_item_2,
+            arrayOf(KEY_TITLE, KEY_SUBTITLE),
+            intArrayOf(android.R.id.text1, android.R.id.text2)
+        ).apply {
+            setViewBinder { view, data, _ ->
+                if (view.id == android.R.id.text2) {
+                    view.visibility = if ((data as? String).isNullOrEmpty()) View.GONE else View.VISIBLE
+                }
+                false
+            }
+        }
+
+        val popup = ListPopupWindow(anchor.context).apply {
+            setAdapter(adapter)
+            anchorView = anchor
+            isModal = true
+            inputMethodMode = ListPopupWindow.INPUT_METHOD_NOT_NEEDED
+            setOnItemClickListener { _, _, position, _ ->
+                requests.trySend(Request.SelectGlobalProxy(proxies[position].name))
+                dismiss()
+            }
+            setOnDismissListener {
+                if (globalProxyPopup === this) {
+                    globalProxyPopup = null
+                }
+            }
+
+            val anchorWidth = anchor.width
+            setContentWidth(if (anchorWidth > 0) anchorWidth else ListPopupWindow.WRAP_CONTENT)
+        }
+
+        globalProxyPopup = popup
+
+        popup.show()
+
+        popup.listView?.apply {
+            choiceMode = ListView.CHOICE_MODE_SINGLE
+            val selectedIndex = proxies.indexOfFirst { it.name == globalProxySelected }
+            if (selectedIndex >= 0) {
+                setItemChecked(selectedIndex, true)
+                setSelection(selectedIndex)
+            }
+        }
+    }
+
+    private fun Proxy.asGlobalProxyItem(): GlobalProxyItem {
+        return GlobalProxyItem(name, title, subtitle)
+    }
+
+    private fun modeLabelFor(mode: TunnelState.Mode?): String {
+        return when (mode) {
+            TunnelState.Mode.Direct -> context.getString(R.string.direct_mode)
+            TunnelState.Mode.Global -> {
+                val selected = globalProxyItems.firstOrNull { it.name == globalProxySelected }
+                val display = selected?.title?.takeIf { it.isNotBlank() }
+                    ?: selected?.name?.takeIf { it.isNotBlank() }
+                    ?: globalProxySelected
+
+                if (!display.isNullOrBlank()) {
+                    context.getString(R.string.global_mode_with_proxy, display)
+                } else {
+                    context.getString(R.string.global_mode)
+                }
+            }
+            TunnelState.Mode.Rule -> context.getString(R.string.rule_mode)
+            else -> context.getString(R.string.rule_mode)
+        }
+    }
+
+    private data class GlobalProxyItem(
+        val name: String,
+        val title: String,
+        val subtitle: String,
+    )
 
     private fun resetTrafficIndicators(clearForwarded: Boolean) {
         trafficHistory.clear()
@@ -235,5 +386,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
     private companion object {
         private const val TRAFFIC_HISTORY_LIMIT = 30
         private const val BYTES_IN_KIB = 1024f
+        private const val KEY_TITLE = "title"
+        private const val KEY_SUBTITLE = "subtitle"
     }
 }

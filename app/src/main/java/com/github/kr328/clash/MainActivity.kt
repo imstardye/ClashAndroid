@@ -12,6 +12,7 @@ import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.ticker
 import com.github.kr328.clash.core.Clash
 import com.github.kr328.clash.core.bridge.*
+import com.github.kr328.clash.core.model.ProxyGroup
 import com.github.kr328.clash.design.MainDesign
 import com.github.kr328.clash.design.ui.ToastDuration
 import com.github.kr328.clash.util.startClashService
@@ -82,6 +83,17 @@ class MainActivity : BaseActivity<MainDesign>() {
 
                             design.fetch()
                         }
+                        is MainDesign.Request.SelectGlobalProxy -> {
+                            val success = withClash {
+                                patchSelector(GLOBAL_GROUP, it.name)
+                            }
+
+                            if (success) {
+                                design.setGlobalProxySelection(it.name)
+                            } else {
+                                design.fetch()
+                            }
+                        }
                     }
                 }
                 if (clashRunning) {
@@ -99,10 +111,14 @@ class MainActivity : BaseActivity<MainDesign>() {
         val state = withClash {
             queryTunnelState()
         }
+        val globalGroup: ProxyGroup? = withClash {
+            runCatching { queryProxyGroup(GLOBAL_GROUP, uiStore.proxySort) }.getOrNull()
+        }
         val providers = withClash {
             queryProviders()
         }
 
+        setGlobalProxyGroup(globalGroup)
         setMode(state.mode)
         setHasProviders(providers.isNotEmpty())
 
@@ -167,6 +183,10 @@ class MainActivity : BaseActivity<MainDesign>() {
                 requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
             }
         }
+    }
+
+    private companion object {
+        private const val GLOBAL_GROUP = "GLOBAL"
     }
 }
 

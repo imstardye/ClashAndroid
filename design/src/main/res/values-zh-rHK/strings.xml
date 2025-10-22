@@ -37,6 +37,7 @@
     <string name="format_profile_activated">%s 已激活</string>
     <string name="format_traffic_forwarded">%s 已轉發</string>
     <string name="global_mode">全局模式</string>
+    <string name="global_mode_with_proxy">全局模式(%1$s)</string>
     <string name="history">歷史</string>
     <string name="import_from_file">從文件導入</string>
     <string name="import_from_url">從 URL 導入</string>
