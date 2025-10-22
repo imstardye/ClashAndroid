@@ -6,5 +6,5 @@
     android:tint="@color/color_clash">
     <path
         android:fillColor="#FFFFFFFF"
-        android:pathData="M 4,20 L 4,4 L 8,4 L 16,20 L 20,20 L 20,4 L 16,4 L 8,20 Z" />
+        android:pathData="M4,4H9V20H4ZM15,4H20V20H15ZM4,20L9,20L20,4H15Z" />
 </vector>
