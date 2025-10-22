@@ -40,6 +40,7 @@
     <string name="rule_mode">Rule Mode</string>
     <string name="global_mode">Global Mode</string>
     <string name="global_mode_with_proxy">Global Mode (%1$s)</string>
+    <string name="global_proxy_selection">Global proxy</string>
     <string name="proxy_empty_tips">No groups can be displayed</string>
 
     <string name="profiles">Profiles</string>
