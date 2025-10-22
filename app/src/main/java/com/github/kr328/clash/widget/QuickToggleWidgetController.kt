@@ -28,8 +28,10 @@ import com.github.kr328.clash.util.unbindServiceSilent
 import com.github.kr328.clash.widget.QuickToggleWidgetProvider.Companion.ACTION_TOGGLE
 import com.github.kr328.clash.widget.QuickToggleWidgetProvider.Companion.allWidgetIds
 import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -42,15 +44,7 @@ object QuickToggleWidgetController {
 
     fun start(context: Context) {
         val appContext = context.applicationContext
-        if (periodicJob == null) {
-            periodicJob = Global.launch {
-                while (true) {
-                    requestUpdate(appContext)
-                    delay(UPDATE_INTERVAL)
-                }
-            }
-        }
-
+        ensurePeriodicJob(appContext)
         requestUpdate(appContext)
     }
 
@@ -61,9 +55,35 @@ object QuickToggleWidgetController {
 
     fun requestUpdate(context: Context, widgetIds: IntArray? = null) {
         val appContext = context.applicationContext
+        ensurePeriodicJob(appContext)
         Global.launch {
             updateMutex.withLock {
                 updateWidgets(appContext, widgetIds)
+            }
+        }
+    }
+
+    private fun ensurePeriodicJob(context: Context) {
+        if (periodicJob != null) {
+            return
+        }
+
+        val appContext = context.applicationContext
+        periodicJob = Global.launch {
+            while (isActive) {
+                try {
+                    updateMutex.withLock {
+                        updateWidgets(appContext, null)
+                    }
+                } catch (t: Throwable) {
+                    if (t is CancellationException) {
+                        throw t
+                    }
+
+                    Log.w("Failed to refresh widget periodically: $t", t)
+                }
+
+                delay(UPDATE_INTERVAL)
             }
         }
     }
@@ -95,7 +115,10 @@ object QuickToggleWidgetController {
 
     private suspend fun updateWidgets(context: Context, widgetIds: IntArray?) {
         val ids = widgetIds ?: allWidgetIds(context)
-        if (ids.isEmpty()) return
+        if (ids.isEmpty()) {
+            stop()
+            return
+        }
 
         val state = loadState(context)
         val manager = AppWidgetManager.getInstance(context)
