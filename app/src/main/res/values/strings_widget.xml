@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_quick_toggle_status_active">Connected</string>
+    <string name="widget_quick_toggle_status_inactive">Disconnected</string>
+    <string name="widget_quick_toggle_upload_label">Upload</string>
+    <string name="widget_quick_toggle_download_label">Download</string>
+    <string name="widget_quick_toggle_placeholder">--</string>
+    <string name="widget_quick_toggle_content_start">Start Clash VPN</string>
+    <string name="widget_quick_toggle_content_stop">Stop Clash VPN</string>
+</resources>
