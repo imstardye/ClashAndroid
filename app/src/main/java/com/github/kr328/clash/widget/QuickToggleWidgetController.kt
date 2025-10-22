@@ -12,7 +12,6 @@ import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import com.github.kr328.clash.MainActivity
 import com.github.kr328.clash.R
-import com.github.kr328.clash.common.Global
 import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.core.util.trafficDownload
@@ -29,7 +28,10 @@ import com.github.kr328.clash.widget.QuickToggleWidgetProvider.Companion.ACTION_
 import com.github.kr328.clash.widget.QuickToggleWidgetProvider.Companion.allWidgetIds
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -39,13 +41,12 @@ import kotlinx.coroutines.withTimeoutOrNull
 
 object QuickToggleWidgetController {
     private const val UPDATE_INTERVAL = 8_000L
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val updateMutex = Mutex()
     private var periodicJob: Job? = null
 
     fun start(context: Context) {
-        val appContext = context.applicationContext
-        ensurePeriodicJob(appContext)
-        requestUpdate(appContext)
+        ensurePeriodicJob(context.applicationContext)
     }
 
     fun stop() {
@@ -53,10 +54,10 @@ object QuickToggleWidgetController {
         periodicJob = null
     }
 
-    fun requestUpdate(context: Context, widgetIds: IntArray? = null) {
+    fun requestUpdate(context: Context, widgetIds: IntArray? = null): Job {
         val appContext = context.applicationContext
         ensurePeriodicJob(appContext)
-        Global.launch {
+        return scope.launch {
             updateMutex.withLock {
                 updateWidgets(appContext, widgetIds)
             }
@@ -64,12 +65,12 @@ object QuickToggleWidgetController {
     }
 
     private fun ensurePeriodicJob(context: Context) {
-        if (periodicJob != null) {
+        if (periodicJob?.isActive == true) {
             return
         }
 
         val appContext = context.applicationContext
-        periodicJob = Global.launch {
+        periodicJob = scope.launch {
             while (isActive) {
                 try {
                     updateMutex.withLock {
@@ -88,9 +89,10 @@ object QuickToggleWidgetController {
         }
     }
 
-    fun toggle(context: Context) {
+    fun toggle(context: Context): Job {
         val appContext = context.applicationContext
-        Global.launch {
+        ensurePeriodicJob(appContext)
+        return scope.launch {
             val running = StatusClient(appContext).currentProfile() != null
 
             if (running) {
@@ -109,7 +111,9 @@ object QuickToggleWidgetController {
             }
 
             delay(500)
-            requestUpdate(appContext)
+            updateMutex.withLock {
+                updateWidgets(appContext, null)
+            }
         }
     }
 
