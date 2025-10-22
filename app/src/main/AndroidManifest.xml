@@ -210,5 +210,21 @@
                 <data android:scheme="android_secret_code" android:host="63878573" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".widget.QuickToggleWidgetProvider"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.github.kr328.clash.widget.action.TOGGLE" />
+                <action android:name="${applicationId}.intent.action.CLASH_STARTED" />
+                <action android:name="${applicationId}.intent.action.CLASH_STOPPED" />
+                <action android:name="${applicationId}.intent.action.PROFILE_LOADED" />
+                <action android:name="${applicationId}.intent.action.CLASH_RECREATED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quick_toggle_widget_info" />
+        </receiver>
     </application>
 </manifest>
