@@ -1,24 +1,28 @@
 package com.github.kr328.clash.design
 
 import android.content.Context
-import android.content.res.ColorStateList
 import android.view.View
 import android.widget.Toast
-import androidx.viewpager2.widget.ViewPager2
+import androidx.core.view.children
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.kr328.clash.core.model.Proxy
 import com.github.kr328.clash.core.model.TunnelState
 import com.github.kr328.clash.design.adapter.ProxyAdapter
-import com.github.kr328.clash.design.adapter.ProxyPageAdapter
+import com.github.kr328.clash.design.adapter.ProxyGroupAdapter
 import com.github.kr328.clash.design.component.ProxyMenu
 import com.github.kr328.clash.design.component.ProxyViewConfig
+import com.github.kr328.clash.design.component.ProxyViewState
 import com.github.kr328.clash.design.databinding.DesignProxyBinding
 import com.github.kr328.clash.design.model.ProxyState
 import com.github.kr328.clash.design.store.UiStore
 import com.github.kr328.clash.design.util.applyFrom
+import com.github.kr328.clash.design.util.bindInsets
+import com.github.kr328.clash.design.util.getPixels
+import com.github.kr328.clash.design.util.invalidateChildren
 import com.github.kr328.clash.design.util.layoutInflater
-import com.github.kr328.clash.design.util.resolveThemedColor
 import com.github.kr328.clash.design.util.root
-import com.google.android.material.tabs.TabLayoutMediator
+import com.github.kr328.clash.design.util.swapDataSet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -26,7 +30,7 @@ class ProxyDesign(
     context: Context,
     overrideMode: TunnelState.Mode?,
     groupNames: List<String>,
-    uiStore: UiStore,
+    private val uiStore: UiStore,
 ) : Design<ProxyDesign.Request>(context) {
     sealed class Request {
         object ReloadAll : Request()
@@ -46,40 +50,66 @@ class ProxyDesign(
     private val menu: ProxyMenu by lazy {
         ProxyMenu(context, binding.menuView, overrideMode, uiStore, requests) {
             config.proxyLine = uiStore.proxyLine
+
+            groupAdapter.notifyDataSetChanged()
         }
     }
 
-    private val adapter: ProxyPageAdapter
-        get() = binding.pagesView.adapter!! as ProxyPageAdapter
+    private val groupItems = groupNames.mapIndexed { index, name ->
+        ProxyGroupAdapter.Group(
+            index = index,
+            name = name,
+            adapter = ProxyAdapter(config) { proxyName ->
+                requests.trySend(Request.Select(index, proxyName))
+            }
+        )
+    }.toMutableList()
 
-    private var horizontalScrolling = false
-    private val verticalBottomScrolled: Boolean
-        get() = adapter.states[binding.pagesView.currentItem].bottom
-    private var urlTesting: Boolean
-        get() = adapter.states[binding.pagesView.currentItem].urlTesting
-        set(value) {
-            adapter.states[binding.pagesView.currentItem].urlTesting = value
-        }
+    private val groupAdapter = ProxyGroupAdapter(
+        config,
+        ::toggleGroup,
+        ::startUrlTesting,
+    )
 
     override val root: View = binding.root
 
     suspend fun updateGroup(
         position: Int,
         proxies: List<Proxy>,
-        selectable: Boolean,
+        type: Proxy.Type,
         parent: ProxyState,
         links: Map<String, ProxyState>
     ) {
-        adapter.updateAdapter(position, proxies, selectable, parent, links)
+        val viewStates = withContext(Dispatchers.Default) {
+            proxies.map { proxy ->
+                val link = if (proxy.type.group) links[proxy.name] else null
 
-        adapter.states[position].urlTesting = false
+                ProxyViewState(config, proxy, parent, link)
+            }
+        }
 
-        updateUrlTestButtonStatus()
+        withContext(Dispatchers.Main) {
+            val group = groupItems.getOrNull(position) ?: return@withContext
+            val adapter = group.adapter
+
+            adapter.selectable = type == Proxy.Type.Selector
+            adapter.swapDataSet(adapter::states, viewStates, false)
+
+            group.type = type
+            group.count = viewStates.size
+            group.urlTesting = false
+
+            groupAdapter.notifyItemChanged(position)
+        }
     }
 
     suspend fun requestRedrawVisible() {
         withContext(Dispatchers.Main) {
-            adapter.requestRedrawVisible()
+            binding.groupsView.children.forEach { child ->
+                val holder = binding.groupsView.getChildViewHolder(child) as? ProxyGroupAdapter.Holder ?: return@forEach
+
+                holder.binding.proxyList.invalidateChildren()
+            }
         }
     }
 
@@ -98,80 +128,58 @@ class ProxyDesign(
             menu.show()
         }
 
-        if (groupNames.isEmpty()) {
-            binding.emptyView.visibility = View.VISIBLE
+        if (groupItems.isEmpty()) {
+            groupAdapter.groups = groupItems
 
-            binding.urlTestView.visibility = View.GONE
-            binding.tabLayoutView.visibility = View.GONE
-            binding.elevationView.visibility = View.GONE
-            binding.pagesView.visibility = View.GONE
-            binding.urlTestFloatView.visibility = View.GONE
+            binding.emptyView.isVisible = true
+            binding.groupsView.isVisible = false
+            binding.elevationView.isVisible = false
         } else {
-            binding.urlTestFloatView.supportImageTintList = ColorStateList.valueOf(
-                context.resolveThemedColor(com.google.android.material.R.attr.colorOnPrimary)
-            )
+            val initialIndex = groupItems.indexOfFirst { it.name == uiStore.proxyLastGroup }
+                .takeIf { it >= 0 }
+                ?: 0
 
-            binding.pagesView.apply {
-                adapter = ProxyPageAdapter(
-                    surface,
-                    config,
-                    List(groupNames.size) { index ->
-                        ProxyAdapter(config) { name ->
-                            requests.trySend(Request.Select(index, name))
-                        }
-                    }
-                ) {
-                    if (it == currentItem)
-                        updateUrlTestButtonStatus()
-                }
+            groupItems.getOrNull(initialIndex)?.expanded = true
 
-                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                    override fun onPageScrollStateChanged(state: Int) {
-                        horizontalScrolling = state != ViewPager2.SCROLL_STATE_IDLE
+            val toolbarHeight = context.getPixels(R.dimen.toolbar_height)
 
-                        updateUrlTestButtonStatus()
-                    }
+            groupAdapter.groups = groupItems
 
-                    override fun onPageSelected(position: Int) {
-                        uiStore.proxyLastGroup = groupNames[position]
-                    }
-                })
+            binding.groupsView.apply {
+                layoutManager = LinearLayoutManager(context)
+                adapter = groupAdapter
+                itemAnimator = null
+                bindInsets(surface, toolbarHeight)
             }
 
-            TabLayoutMediator(binding.tabLayoutView, binding.pagesView) { tab, index ->
-                tab.text = groupNames[index]
-            }.attach()
-
-            val initialPosition = groupNames.indexOf(uiStore.proxyLastGroup)
-
-            binding.pagesView.post {
-                if (initialPosition > 0)
-                    binding.pagesView.setCurrentItem(initialPosition, false)
-            }
+            binding.emptyView.isVisible = false
+            binding.groupsView.isVisible = true
+            binding.elevationView.isVisible = true
         }
     }
 
-    fun requestUrlTesting() {
-        urlTesting = true
+    private fun toggleGroup(index: Int) {
+        val group = groupItems.getOrNull(index) ?: return
 
-        requests.trySend(Request.UrlTest(binding.pagesView.currentItem))
+        group.expanded = !group.expanded
 
-        updateUrlTestButtonStatus()
+        if (group.expanded) {
+            uiStore.proxyLastGroup = group.name
+        }
+
+        groupAdapter.notifyItemChanged(index)
     }
 
-    private fun updateUrlTestButtonStatus() {
-        if (verticalBottomScrolled || horizontalScrolling || urlTesting) {
-            binding.urlTestFloatView.hide()
-        } else {
-            binding.urlTestFloatView.show()
+    private fun startUrlTesting(index: Int) {
+        val group = groupItems.getOrNull(index) ?: return
+
+        if (group.urlTesting) {
+            return
         }
 
-        if (urlTesting) {
-            binding.urlTestView.visibility = View.GONE
-            binding.urlTestProgressView.visibility = View.VISIBLE
-        } else {
-            binding.urlTestView.visibility = View.VISIBLE
-            binding.urlTestProgressView.visibility = View.GONE
-        }
+        group.urlTesting = true
+        groupAdapter.notifyItemChanged(index)
+
+        requests.trySend(Request.UrlTest(index))
     }
 }
