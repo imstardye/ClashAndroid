@@ -22,68 +22,69 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:id="@+id/header_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:gravity="center_vertical"
                 android:minHeight="@dimen/item_min_height"
+                android:orientation="horizontal"
                 android:paddingStart="@dimen/item_header_margin"
                 android:paddingTop="@dimen/item_padding_vertical"
                 android:paddingEnd="@dimen/item_header_margin"
                 android:paddingBottom="@dimen/item_padding_vertical">
 
-                <TextView
-                    android:id="@+id/group_name_view"
+                <LinearLayout
+                    android:id="@+id/group_label_container"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
-                    app:layout_constrainedWidth="true"
-                    app:layout_constraintEnd_toStartOf="@id/group_type_chip"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    tools:text="XXC节点" />
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/group_type_chip"
-                    style="@style/Widget.MaterialComponents.Chip.Action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                    android:visibility="gone"
-                    app:chipBackgroundColor="@color/mtrl_filled_background_color"
-                    app:chipCornerRadius="12dp"
-                    app:chipIconVisible="false"
-                    app:chipStrokeWidth="0dp"
-                    app:layout_constraintBottom_toBottomOf="@id/group_name_view"
-                    app:layout_constraintStart_toEndOf="@id/group_name_view"
-                    app:layout_constraintTop_toTopOf="@id/group_name_view"
-                    tools:text="Selector" />
+                    <TextView
+                        android:id="@+id/group_name_view"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                        tools:text="XXC节点" />
 
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/group_count_chip"
-                    style="@style/Widget.MaterialComponents.Chip.Action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
-                    app:chipBackgroundColor="@color/mtrl_filled_background_color"
-                    app:chipCornerRadius="12dp"
-                    app:chipIconVisible="false"
-                    app:chipStrokeWidth="0dp"
-                    app:layout_constraintBottom_toBottomOf="@id/group_name_view"
-                    app:layout_constraintStart_toEndOf="@id/group_type_chip"
-                    app:layout_constraintTop_toTopOf="@id/group_name_view"
-                    app:layout_goneMarginStart="8dp"
-                    tools:text="31" />
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/group_type_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        android:visibility="gone"
+                        app:chipBackgroundColor="@color/mtrl_filled_background_color"
+                        app:chipCornerRadius="12dp"
+                        app:chipIconVisible="false"
+                        app:chipStrokeWidth="0dp"
+                        tools:text="Selector" />
+
+                    <com.google.android.material.chip.Chip
+                        android:id="@+id/group_count_chip"
+                        style="@style/Widget.MaterialComponents.Chip.Action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:visibility="gone"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                        app:chipBackgroundColor="@color/mtrl_filled_background_color"
+                        app:chipCornerRadius="12dp"
+                        app:chipIconVisible="false"
+                        app:chipStrokeWidth="0dp"
+                        tools:text="31" />
+                </LinearLayout>
 
                 <FrameLayout
                     android:id="@+id/url_test_container"
@@ -92,10 +93,7 @@
                     android:layout_marginStart="@dimen/item_tailing_margin"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:focusable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/expand_icon"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:focusable="true">
 
                     <ImageView
                         android:id="@+id/url_test_button"
@@ -120,6 +118,7 @@
                     android:id="@+id/expand_icon"
                     android:layout_width="@dimen/item_tailing_component_size"
                     android:layout_height="@dimen/item_tailing_component_size"
+                    android:layout_marginStart="@dimen/item_tailing_margin"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
                     android:contentDescription="@string/expand"
@@ -127,11 +126,8 @@
                     android:padding="@dimen/toolbar_image_action_padding"
                     android:src="@drawable/ic_baseline_expand_more"
                     android:tint="?attr/colorOnSurface"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     tools:rotation="180" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/proxy_list"
