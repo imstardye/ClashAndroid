@@ -42,6 +42,13 @@
     <string name="global_mode_with_proxy">Global Mode (%1$s)</string>
     <string name="global_proxy_selection">Global proxy</string>
     <string name="proxy_empty_tips">No groups can be displayed</string>
+    <string name="proxy_group_selector">Selector</string>
+    <string name="proxy_group_relay">Relay</string>
+    <string name="proxy_group_fallback">Fallback</string>
+    <string name="proxy_group_urltest">URL Test</string>
+    <string name="proxy_group_loadbalance">Load Balance</string>
+    <string name="expand">Expand</string>
+    <string name="collapse">Collapse</string>
 
     <string name="profiles">Profiles</string>
     <string name="not_selected">Not selected</string>
