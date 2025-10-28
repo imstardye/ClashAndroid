@@ -12,14 +12,8 @@ import kotlinx.coroutines.Job
 class QuickToggleWidgetProvider : AppWidgetProvider() {
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
-        QuickToggleWidgetController.start(context)
         QuickToggleWidgetController.requestUpdate(context)
             .finishWhenComplete(goAsync())
-    }
-
-    override fun onDisabled(context: Context) {
-        super.onDisabled(context)
-        QuickToggleWidgetController.stop()
     }
 
     override fun onUpdate(
