@@ -50,7 +50,11 @@ class TileService : TileService() {
             null
         )
 
-        val name = StatusClient(this).currentProfile()
+        val name = try {
+            StatusClient(this).currentProfile()
+        } catch (e: Exception) {
+            null
+        }
 
         clashRunning = name != null
         currentProfile = name ?: ""
@@ -96,7 +100,11 @@ class TileService : TileService() {
                     currentProfile = ""
                 }
                 Intents.ACTION_PROFILE_LOADED -> {
-                    currentProfile = StatusClient(this@TileService).currentProfile() ?: ""
+                    currentProfile = try {
+                        StatusClient(this@TileService).currentProfile() ?: ""
+                    } catch (e: Exception) {
+                        ""
+                    }
                 }
             }
 
