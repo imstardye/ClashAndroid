@@ -6,6 +6,8 @@
     <string name="widget_quick_toggle_upload_label">Upload</string>
     <string name="widget_quick_toggle_download_label">Download</string>
     <string name="widget_quick_toggle_placeholder">--</string>
+    <string name="widget_quick_toggle_tap_to_connect">Tap to connect</string>
+    <string name="widget_quick_toggle_tap_to_disconnect">Tap to disconnect</string>
     <string name="widget_quick_toggle_content_start">Start Clash VPN</string>
     <string name="widget_quick_toggle_content_stop">Stop Clash VPN</string>
     <string name="widget_quick_toggle_content_refresh">Refresh Clash status</string>
