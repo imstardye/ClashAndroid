@@ -7,4 +7,9 @@
     <color name="color_status_button_start_background">#FF2D3B60</color>
     <color name="color_status_button_start_foreground">#FFD9E0FF</color>
     <color name="color_status_button_stop_background">#FF2E3BD8</color>
+    
+    <!-- Tech refresh colors for dark mode -->
+    <color name="color_card_elevated">#FF1E2A47</color>
+    <color name="color_tech_glow">#335B6CFF</color>
+    <color name="color_status_running_shadow">#555B6CFF</color>
 </resources>
