@@ -9,50 +9,29 @@ import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import com.github.kr328.clash.R
 import com.github.kr328.clash.common.log.Log
-import com.github.kr328.clash.core.util.trafficDownload
-import com.github.kr328.clash.core.util.trafficUpload
 import com.github.kr328.clash.remote.StatusClient
 import com.github.kr328.clash.util.startClashService
 import com.github.kr328.clash.util.stopClashService
-import com.github.kr328.clash.util.withClash
 import com.github.kr328.clash.widget.QuickToggleWidgetProvider.Companion.allWidgetIds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 object QuickToggleWidgetController {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var refreshJob: Job? = null
-    private const val REFRESH_INTERVAL = 5000L
 
     fun requestUpdate(context: Context, widgetIds: IntArray? = null): Job {
         val appContext = context.applicationContext
         return scope.launch {
             try {
                 renderWidgets(appContext, widgetIds)
-                startPeriodicRefresh(appContext)
             } catch (t: Throwable) {
                 Log.w("Failed to update widget: $t", t)
-            }
-        }
-    }
-
-    private fun startPeriodicRefresh(context: Context) {
-        if (refreshJob?.isActive == true) return
-        
-        refreshJob = scope.launch {
-            while (isActive) {
-                delay(REFRESH_INTERVAL)
-                try {
-                    renderWidgets(context, null)
-                } catch (t: Throwable) {
-                    Log.w("Failed to refresh widget: $t", t)
-                }
             }
         }
     }
@@ -102,20 +81,7 @@ object QuickToggleWidgetController {
             }
         }
 
-        val traffic = if (running) {
-            try {
-                withClash {
-                    queryTrafficTotal()
-                }
-            } catch (t: Throwable) {
-                Log.w("Failed to query traffic: $t", t)
-                null
-            }
-        } else {
-            null
-        }
-
-        return WidgetState(running = running, traffic = traffic)
+        return WidgetState(running = running)
     }
 
     private suspend fun toggleClash(context: Context) {
@@ -166,12 +132,21 @@ object QuickToggleWidgetController {
         )
         views.setInt(R.id.widget_status_label, "setTextColor", statusColor)
 
-        if (state.running && state.traffic != null) {
-            views.setViewVisibility(R.id.widget_traffic_container, View.VISIBLE)
-            views.setTextViewText(R.id.widget_traffic_upload, state.traffic.trafficUpload())
-            views.setTextViewText(R.id.widget_traffic_download, state.traffic.trafficDownload())
+        val subtitleText = if (state.running) {
+            context.getString(R.string.widget_quick_toggle_tap_to_disconnect)
         } else {
-            views.setViewVisibility(R.id.widget_traffic_container, View.GONE)
+            context.getString(R.string.widget_quick_toggle_tap_to_connect)
+        }
+        views.setTextViewText(R.id.widget_status_subtitle, subtitleText)
+
+        if (state.running) {
+            views.setViewVisibility(R.id.widget_glow_bg, View.VISIBLE)
+            views.setViewVisibility(R.id.widget_pulse_ring_outer, View.VISIBLE)
+            views.setViewVisibility(R.id.widget_pulse_ring_inner, View.VISIBLE)
+        } else {
+            views.setViewVisibility(R.id.widget_glow_bg, View.GONE)
+            views.setViewVisibility(R.id.widget_pulse_ring_outer, View.GONE)
+            views.setViewVisibility(R.id.widget_pulse_ring_inner, View.GONE)
         }
 
         val iconTint = ContextCompat.getColor(
@@ -221,7 +196,6 @@ object QuickToggleWidgetController {
     }
 
     private data class WidgetState(
-        val running: Boolean,
-        val traffic: Long? = null
+        val running: Boolean
     )
 }
