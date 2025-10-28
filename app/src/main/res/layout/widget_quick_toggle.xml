@@ -20,26 +20,78 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0.02"
             android:maxLines="1"
             android:text="@string/widget_quick_toggle_status_inactive"
             android:textColor="@color/widget_quick_toggle_status_text_inactive"
-            android:textSize="13sp" />
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:id="@+id/widget_traffic_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_widget_arrow_up"
+                android:tint="@color/widget_quick_toggle_label" />
+
+            <TextView
+                android:id="@+id/widget_traffic_upload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/widget_quick_toggle_placeholder"
+                android:textColor="@color/widget_quick_toggle_value"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:background="@color/widget_quick_toggle_divider" />
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="4dp"
+                android:src="@drawable/ic_widget_arrow_down"
+                android:tint="@color/widget_quick_toggle_label" />
+
+            <TextView
+                android:id="@+id/widget_traffic_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/widget_quick_toggle_placeholder"
+                android:textColor="@color/widget_quick_toggle_value"
+                android:textSize="12sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/widget_toggle_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="8dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="12dp"
         android:background="@drawable/widget_quick_toggle_button_bg">
 
         <ImageView
             android:id="@+id/widget_toggle_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
             android:layout_gravity="center"
             android:contentDescription="@string/widget_quick_toggle_content_start"
-            android:src="@drawable/ic_widget_power"
+            android:src="@drawable/ic_widget_rocket"
             android:tint="@color/widget_quick_toggle_icon_inactive" />
     </FrameLayout>
 </LinearLayout>
