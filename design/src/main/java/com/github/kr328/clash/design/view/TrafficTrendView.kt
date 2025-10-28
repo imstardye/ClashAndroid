@@ -26,14 +26,16 @@ class TrafficTrendView @JvmOverloads constructor(
         color = MaterialColors.getColor(
             this@TrafficTrendView,
             com.google.android.material.R.attr.colorPrimary,
-            0xFF1E88E5.toInt()
+            0xFF4F5CFF.toInt()
         )
+        strokeCap = Paint.Cap.ROUND
+        strokeJoin = Paint.Join.ROUND
     }
 
     private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = linePaint.color
-        alpha = 56
+        alpha = 70
     }
 
     private val gridPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -44,12 +46,18 @@ class TrafficTrendView @JvmOverloads constructor(
             com.google.android.material.R.attr.colorOnSurface,
             0x33000000
         )
-        alpha = 80
+        alpha = 50
     }
 
     private val pointPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = linePaint.color
+    }
+
+    private val pointOuterPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        style = Paint.Style.FILL
+        color = linePaint.color
+        alpha = 100
     }
 
     private val pointRadius = resources.getDimension(R.dimen.main_traffic_chart_point_radius)
@@ -131,6 +139,7 @@ class TrafficTrendView @JvmOverloads constructor(
         val lastSample = samples.last().coerceAtLeast(0f)
         val lastX = left + widthStep * (samples.size - 1)
         val lastY = bottom - lastSample * heightScale
+        canvas.drawCircle(lastX, lastY, pointRadius * 1.5f, pointOuterPaint)
         canvas.drawCircle(lastX, lastY, pointRadius, pointPaint)
     }
 }

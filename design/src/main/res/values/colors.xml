@@ -18,4 +18,12 @@
     <color name="color_surface_container">#FFF1F3FF</color>
     <color name="color_surface_ripple">#1A000000</color>
     <color name="color_surface_stroke">#19334874</color>
+    
+    <!-- Tech refresh colors -->
+    <color name="color_tech_gradient_start">#5B6CFF</color>
+    <color name="color_tech_gradient_end">#3D4AE0</color>
+    <color name="color_tech_accent">#00D9FF</color>
+    <color name="color_tech_glow">#1A5B6CFF</color>
+    <color name="color_status_running_shadow">#335B6CFF</color>
+    <color name="color_card_elevated">#FFFFFFFF</color>
 </resources>

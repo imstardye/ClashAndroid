@@ -77,7 +77,9 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:minHeight="@dimen/main_top_banner_height"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
 
                     <FrameLayout
                         android:layout_width="@dimen/large_item_header_layout_size"
@@ -100,14 +102,16 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/application_name"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/main_header_subtitle_margin"
                             android:text="@string/dashboard_subtitle"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            android:alpha="0.7" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -122,6 +126,8 @@
                     android:onClick="@{() -> self.request(Request.toggleStatus())}"
                     app:contentPadding="@dimen/main_card_content_padding"
                     app:strokeColor="@android:color/transparent"
+                    app:cardElevation="@dimen/main_status_card_elevation"
+                    app:cardCornerRadius="@dimen/main_card_corner_radius"
                     app:cardBackgroundColor="@{clashRunning ? colorClashStarted : colorClashStopped}">
 
                     <LinearLayout
@@ -129,13 +135,29 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/statusTitle"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/dashboard_status_title"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-                            android:textColor="@android:color/white" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:id="@+id/statusTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/dashboard_status_title"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                                android:textStyle="bold"
+                                android:textColor="@android:color/white" />
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="12dp"
+                                android:layout_marginStart="8dp"
+                                android:background="@drawable/ic_baseline_flash_on"
+                                android:visibility="@{clashRunning ? View.VISIBLE : View.GONE}" />
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/statusSubtitle"
@@ -143,8 +165,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/main_card_section_spacing"
                             android:text='@{profileName != null ? @string/format_profile_activated(profileName) : @string/not_selected}'
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                            android:textColor="@android:color/white" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            android:textColor="@android:color/white"
+                            android:alpha="0.9" />
 
                         <TextView
                             android:id="@+id/statusMode"
@@ -152,8 +175,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/main_card_item_spacing"
                             android:text='@{mode}'
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-                            android:textColor="@android:color/white" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            android:textColor="@android:color/white"
+                            android:alpha="0.85" />
 
                         <TextView
                             android:id="@+id/statusForwarded"
@@ -162,23 +186,29 @@
                             android:layout_marginTop="@dimen/main_card_item_spacing"
                             android:text='@{clashRunning ? @string/format_traffic_forwarded(forwarded) : @string/tap_to_start}'
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                            android:textColor="@android:color/white" />
+                            android:textColor="@android:color/white"
+                            android:alpha="0.85" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/statusToggle"
                             style="@style/Widget.Clash.Button"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/main_status_button_height"
                             android:layout_marginTop="@dimen/main_card_section_spacing"
                             android:onClick="@{() -> self.request(Request.toggleStatus())}"
                             android:text='@{clashRunning ? @string/stop_service : @string/start_service}'
+                            android:textSize="16sp"
+                            android:textStyle="bold"
                             android:textColor='@{clashRunning ? @android:color/white : @color/color_status_button_start_foreground}'
                             android:backgroundTint='@{clashRunning ? @color/color_status_button_stop_background : @color/color_status_button_start_background}'
                             app:icon='@{clashRunning ? @drawable/ic_baseline_stop : @drawable/ic_baseline_play_arrow}'
                             app:iconGravity="textStart"
+                            app:iconSize="28dp"
                             app:iconPadding="@dimen/main_status_button_icon_padding"
                             app:iconTint='@{clashRunning ? @android:color/white : @color/color_status_button_start_foreground}'
-                            app:strokeColor="@android:color/transparent" />
+                            app:strokeColor="@android:color/transparent"
+                            app:cornerRadius="16dp"
+                            app:elevation="4dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -187,7 +217,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/main_dashboard_item_spacing"
-                    app:contentPadding="@dimen/main_card_content_padding">
+                    app:contentPadding="@dimen/main_card_content_padding"
+                    app:cardElevation="@dimen/main_card_elevation"
+                    app:cardCornerRadius="@dimen/main_card_corner_radius"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/color_tech_glow">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -198,7 +232,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/traffic_overview"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                            android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/trafficSpeed"
@@ -206,7 +241,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/main_card_item_spacing"
                             android:text='@{trafficSpeedText}'
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorPrimary" />
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -226,6 +263,7 @@
                                 android:text="@string/traffic_chart_empty"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                                 android:textColor="?attr/colorOnSurface"
+                                android:alpha="0.6"
                                 android:visibility="@{hasTrafficHistory ? View.GONE : View.VISIBLE}" />
                         </FrameLayout>
 
@@ -241,7 +279,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/main_card_item_spacing"
                             android:text="@string/traffic_history_hint"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                            android:alpha="0.7" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
@@ -250,7 +289,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/main_dashboard_item_spacing"
-                    app:contentPadding="@dimen/main_card_content_padding">
+                    app:contentPadding="@dimen/main_card_content_padding"
+                    app:cardElevation="@dimen/main_card_elevation"
+                    app:cardCornerRadius="@dimen/main_card_corner_radius"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/color_tech_glow">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -261,7 +304,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/connection_overview"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:id="@+id/currentModeRow"
@@ -423,7 +467,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/main_dashboard_item_spacing"
                     android:layout_marginBottom="@dimen/main_dashboard_item_spacing"
-                    app:contentPadding="@dimen/main_card_content_padding">
+                    app:contentPadding="@dimen/main_card_content_padding"
+                    app:cardElevation="@dimen/main_card_elevation"
+                    app:cardCornerRadius="@dimen/main_card_corner_radius"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="@color/color_tech_glow">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -434,7 +482,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/quick_actions"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                            android:textStyle="bold" />
 
                         <com.github.kr328.clash.design.view.LargeActionLabel
                             android:layout_width="match_parent"
