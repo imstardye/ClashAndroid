@@ -86,7 +86,12 @@ object QuickToggleWidgetController {
 
     private suspend fun toggleClash(context: Context) {
         val running = withContext(Dispatchers.IO) {
-            StatusClient(context).currentProfile() != null
+            try {
+                StatusClient(context).currentProfile() != null
+            } catch (e: Exception) {
+                Log.w("Failed to check status: $e", e)
+                false
+            }
         }
 
         if (running) {
