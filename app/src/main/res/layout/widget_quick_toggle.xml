@@ -4,134 +4,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/widget_quick_toggle_bg"
-    android:orientation="vertical"
-    android:padding="@dimen/widget_quick_toggle_padding">
+    android:gravity="center"
+    android:orientation="horizontal"
+    android:padding="12dp">
+
+    <ImageView
+        android:id="@+id/widget_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_widget_power"
+        android:tint="@color/widget_quick_toggle_icon_inactive" />
 
     <TextView
         android:id="@+id/widget_status_label"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ellipsize="end"
         android:fontFamily="sans-serif-medium"
-        android:text="@string/widget_quick_toggle_status_inactive"
-        android:textAllCaps="false"
+        android:maxLines="1"
+        android:text="@string/app_name"
         android:textColor="@color/widget_quick_toggle_status_text_inactive"
-        android:textSize="@dimen/widget_quick_toggle_status_text_size" />
-
-    <FrameLayout
-        android:id="@+id/widget_button_touch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/widget_quick_toggle_section_spacing"
-        android:padding="@dimen/widget_quick_toggle_button_touch_padding">
-
-        <FrameLayout
-            android:id="@+id/widget_button_container"
-            android:layout_width="@dimen/widget_quick_toggle_button_size"
-            android:layout_height="@dimen/widget_quick_toggle_button_size"
-            android:background="@drawable/widget_quick_toggle_button_bg">
-
-            <ImageView
-                android:id="@+id/widget_toggle_icon"
-                android:layout_width="@dimen/widget_quick_toggle_button_icon_size"
-                android:layout_height="@dimen/widget_quick_toggle_button_icon_size"
-                android:layout_gravity="center"
-                android:contentDescription="@null"
-                android:src="@drawable/ic_widget_power" />
-        </FrameLayout>
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/widget_quick_toggle_section_spacing"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_widget_arrow_up"
-                    android:tint="@color/widget_quick_toggle_label" />
-
-                <TextView
-                    android:id="@+id/widget_upload_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/widget_quick_toggle_metrics_spacing"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/widget_quick_toggle_upload_label"
-                    android:textColor="@color/widget_quick_toggle_label"
-                    android:textSize="@dimen/widget_quick_toggle_metric_label_size" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/widget_upload_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/widget_quick_toggle_placeholder"
-                android:textColor="@color/widget_quick_toggle_value"
-                android:textSize="@dimen/widget_quick_toggle_metric_value_size" />
-        </LinearLayout>
-
-        <View
-            android:layout_width="@dimen/widget_quick_toggle_divider_width"
-            android:layout_height="match_parent"
-            android:layout_marginHorizontal="@dimen/widget_quick_toggle_metrics_spacing"
-            android:background="@color/widget_quick_toggle_divider" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_widget_arrow_down"
-                    android:tint="@color/widget_quick_toggle_label" />
-
-                <TextView
-                    android:id="@+id/widget_download_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/widget_quick_toggle_metrics_spacing"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/widget_quick_toggle_download_label"
-                    android:textColor="@color/widget_quick_toggle_label"
-                    android:textSize="@dimen/widget_quick_toggle_metric_label_size" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/widget_download_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/widget_quick_toggle_placeholder"
-                android:textColor="@color/widget_quick_toggle_value"
-                android:textSize="@dimen/widget_quick_toggle_metric_value_size" />
-        </LinearLayout>
-    </LinearLayout>
+        android:textSize="14sp" />
 </LinearLayout>

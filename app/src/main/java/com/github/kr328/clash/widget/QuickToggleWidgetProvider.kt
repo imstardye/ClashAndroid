@@ -12,14 +12,8 @@ import kotlinx.coroutines.Job
 class QuickToggleWidgetProvider : AppWidgetProvider() {
     override fun onEnabled(context: Context) {
         super.onEnabled(context)
-        QuickToggleWidgetController.start(context)
         QuickToggleWidgetController.requestUpdate(context)
             .finishWhenComplete(goAsync())
-    }
-
-    override fun onDisabled(context: Context) {
-        super.onDisabled(context)
-        QuickToggleWidgetController.stop()
     }
 
     override fun onUpdate(
@@ -34,7 +28,6 @@ class QuickToggleWidgetProvider : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val job = when (intent.action) {
-            ACTION_TOGGLE -> QuickToggleWidgetController.toggle(context)
             Intents.ACTION_CLASH_STARTED,
             Intents.ACTION_CLASH_STOPPED,
             Intents.ACTION_PROFILE_LOADED,
@@ -50,9 +43,6 @@ class QuickToggleWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
-        private const val PACKAGE = "com.github.kr328.clash.widget"
-        const val ACTION_TOGGLE = "$PACKAGE.action.TOGGLE"
-
         fun allWidgetIds(context: Context): IntArray {
             val manager = AppWidgetManager.getInstance(context)
             return manager.getAppWidgetIds(ComponentName(context, QuickToggleWidgetProvider::class.java))
