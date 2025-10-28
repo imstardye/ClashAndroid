@@ -26,6 +26,11 @@ class QuickToggleWidgetProvider : AppWidgetProvider() {
             .finishWhenComplete(goAsync())
     }
 
+    override fun onDisabled(context: Context) {
+        super.onDisabled(context)
+        QuickToggleWidgetController.stopRefresh()
+    }
+
     override fun onReceive(context: Context, intent: Intent) {
         val job = when (intent.action) {
             ACTION_TOGGLE -> QuickToggleWidgetController.toggle(context)
