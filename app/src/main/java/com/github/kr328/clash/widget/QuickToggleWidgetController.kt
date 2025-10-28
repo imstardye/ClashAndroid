@@ -6,15 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
-import com.github.kr328.clash.MainActivity
 import com.github.kr328.clash.R
 import com.github.kr328.clash.common.log.Log
 import com.github.kr328.clash.remote.StatusClient
+import com.github.kr328.clash.util.startClashService
+import com.github.kr328.clash.util.stopClashService
 import com.github.kr328.clash.widget.QuickToggleWidgetProvider.Companion.allWidgetIds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -32,6 +34,19 @@ object QuickToggleWidgetController {
         }
     }
 
+    fun toggle(context: Context): Job {
+        val appContext = context.applicationContext
+        return scope.launch {
+            try {
+                toggleClash(appContext)
+                delay(500)
+                renderWidgets(appContext, null)
+            } catch (t: Throwable) {
+                Log.w("Failed to toggle from widget: $t", t)
+            }
+        }
+    }
+
     private suspend fun renderWidgets(context: Context, widgetIds: IntArray?) {
         val ids = widgetIds ?: allWidgetIds(context)
         if (ids.isEmpty()) {
@@ -43,7 +58,7 @@ object QuickToggleWidgetController {
         
         withContext(Dispatchers.Main.immediate) {
             ids.forEach { id ->
-                manager.updateAppWidget(id, buildRemoteViews(context, state))
+                manager.updateAppWidget(id, buildRemoteViews(context, id, state))
             }
         }
     }
@@ -61,7 +76,34 @@ object QuickToggleWidgetController {
         return WidgetState(running = running)
     }
 
-    private fun buildRemoteViews(context: Context, state: WidgetState): RemoteViews {
+    private suspend fun toggleClash(context: Context) {
+        val running = withContext(Dispatchers.IO) {
+            StatusClient(context).currentProfile() != null
+        }
+
+        if (running) {
+            withContext(Dispatchers.IO) {
+                context.stopClashService()
+            }
+        } else {
+            val vpnRequest = withContext(Dispatchers.IO) {
+                context.startClashService()
+            }
+            
+            if (vpnRequest != null) {
+                vpnRequest.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                withContext(Dispatchers.Main.immediate) {
+                    kotlin.runCatching {
+                        ContextCompat.startActivity(context, vpnRequest, null)
+                    }.onFailure {
+                        Log.w("Unable to request VPN permission: $it", it)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun buildRemoteViews(context: Context, widgetId: Int, state: WidgetState): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.widget_quick_toggle)
 
         val statusText = if (state.running) {
@@ -90,7 +132,14 @@ object QuickToggleWidgetController {
                 R.color.widget_quick_toggle_icon_inactive
             }
         )
-        views.setInt(R.id.widget_icon, "setColorFilter", iconTint)
+        views.setInt(R.id.widget_toggle_icon, "setColorFilter", iconTint)
+
+        val buttonBackground = if (state.running) {
+            R.drawable.widget_quick_toggle_button_bg_active
+        } else {
+            R.drawable.widget_quick_toggle_button_bg
+        }
+        views.setInt(R.id.widget_toggle_button, "setBackgroundResource", buttonBackground)
 
         val rootBackground = if (state.running) {
             R.drawable.widget_quick_toggle_bg_active
@@ -99,16 +148,24 @@ object QuickToggleWidgetController {
         }
         views.setInt(R.id.widget_root, "setBackgroundResource", rootBackground)
 
-        val openAppIntent = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+        val contentDescription = if (state.running) {
+            context.getString(R.string.widget_quick_toggle_content_stop)
+        } else {
+            context.getString(R.string.widget_quick_toggle_content_start)
         }
-        val openAppPendingIntent = PendingIntent.getActivity(
+        views.setContentDescription(R.id.widget_toggle_button, contentDescription)
+
+        val toggleIntent = Intent(context, QuickToggleWidgetProvider::class.java).apply {
+            action = QuickToggleWidgetProvider.ACTION_TOGGLE
+            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        }
+        val togglePendingIntent = PendingIntent.getBroadcast(
             context,
-            0,
-            openAppIntent,
+            widgetId,
+            toggleIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        views.setOnClickPendingIntent(R.id.widget_root, openAppPendingIntent)
+        views.setOnClickPendingIntent(R.id.widget_toggle_button, togglePendingIntent)
 
         return views
     }
