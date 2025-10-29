@@ -72,8 +72,6 @@ class MainActivity : BaseActivity<MainDesign>() {
                             startActivity(SettingsActivity::class.intent)
                         MainDesign.Request.OpenAbout ->
                             design.showAbout(queryAppVersionName())
-                        MainDesign.Request.OpenAppRouting ->
-                            startActivity(AppRoutingActivity::class.intent)
                         is MainDesign.Request.SetMode -> {
                             withClash {
                                 val override = queryOverride(Clash.OverrideSlot.Session)
