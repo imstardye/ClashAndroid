@@ -151,9 +151,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
             binding.modeToggleGroup.check(buttonId)
             updatingModeToggle = false
 
-            if (mode == TunnelState.Mode.Global) {
-                showGlobalProxyDropdownIfAvailable()
-            } else {
+            if (mode != TunnelState.Mode.Global) {
                 binding.globalProxyDropdown.dismissDropDown()
             }
         }
