@@ -166,7 +166,7 @@
             android:name=".AccessControlActivity"
             android:configChanges="uiMode"
             android:exported="false"
-            android:label="@string/access_control_packages" />
+            android:label="@string/access_control_quick" />
         <activity
             android:name=".FilesActivity"
             android:configChanges="uiMode"

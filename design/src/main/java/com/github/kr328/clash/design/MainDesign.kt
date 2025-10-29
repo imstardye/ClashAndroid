@@ -35,6 +35,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         object OpenLogs : Request()
         object OpenSettings : Request()
         object OpenAbout : Request()
+        object OpenAccessControl : Request()
         data class SetMode(val mode: TunnelState.Mode) : Request()
         data class SelectGlobalProxy(val name: String) : Request()
 
@@ -59,6 +60,9 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
 
             @JvmStatic
             fun openAbout(): Request = OpenAbout
+
+            @JvmStatic
+            fun openAccessControl(): Request = OpenAccessControl
 
             @JvmStatic
             fun setMode(mode: TunnelState.Mode): Request = SetMode(mode)
@@ -163,6 +167,12 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         }
     }
 
+    suspend fun setAccessControlSummary(summary: String) {
+        withContext(Dispatchers.Main) {
+            binding.accessControlSummary = summary
+        }
+    }
+
     suspend fun showAbout(versionName: String) {
         withContext(Dispatchers.Main) {
             val binding = DesignAboutBinding.inflate(context.layoutInflater).apply {
@@ -177,6 +187,8 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
 
     init {
         binding.self = this
+
+        binding.accessControlSummary = context.getString(R.string.access_control_mode)
 
         binding.colorClashStarted = context.resolveThemedColor(com.google.android.material.R.attr.colorPrimary)
         binding.colorClashStopped = context.resolveThemedColor(R.attr.colorClashStopped)
