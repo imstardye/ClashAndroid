@@ -5,7 +5,7 @@ import android.view.View
 import android.widget.RadioButton
 import androidx.core.widget.addTextChangedListener
 import com.github.kr328.clash.design.adapter.AppAdapter
-import com.github.kr328.clash.design.component.AccessControlMenu
+import com.github.kr328.clash.design.component.AccessControlQuickMenu
 import com.github.kr328.clash.design.databinding.DesignAccessControlQuickBinding
 import com.github.kr328.clash.design.databinding.DialogSearchBinding
 import com.github.kr328.clash.design.dialog.FullScreenDialog
@@ -37,8 +37,8 @@ class AccessControlQuickDesign(
 
     private val adapter = AppAdapter(context, selected, ::notifySelectionChanged)
 
-    private val menu: AccessControlMenu by lazy {
-        AccessControlMenu(context, binding.menuView, uiStore, requests)
+    private val menu: AccessControlQuickMenu by lazy {
+        AccessControlQuickMenu(context, binding.menuView, uiStore, requests)
     }
 
     val apps: List<AppInfo>
