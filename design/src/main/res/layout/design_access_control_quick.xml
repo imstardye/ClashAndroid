@@ -225,7 +225,8 @@
                                 android:id="@+id/main_list"
                                 layout="@layout/common_recycler_list"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
+                                android:layout_height="match_parent"
+                                app:insets="@{self.surface.insets}" />
 
                             <TextView
                                 android:id="@+id/disabled_overlay_text"
