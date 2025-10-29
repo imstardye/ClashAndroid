@@ -1,14 +1,16 @@
 package com.github.kr328.clash.design
 
 import android.content.Context
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.widget.addTextChangedListener
 import com.github.kr328.clash.design.adapter.AppAdapter
-import com.github.kr328.clash.design.component.AccessControlMenu
 import com.github.kr328.clash.design.databinding.DesignAppRoutingBinding
 import com.github.kr328.clash.design.databinding.DialogSearchBinding
 import com.github.kr328.clash.design.dialog.FullScreenDialog
 import com.github.kr328.clash.design.model.AppInfo
+import com.github.kr328.clash.design.model.AppInfoSort
 import com.github.kr328.clash.design.store.UiStore
 import com.github.kr328.clash.design.util.*
 import com.github.kr328.clash.service.model.AccessControlMode
@@ -17,7 +19,7 @@ import kotlinx.coroutines.channels.Channel
 
 class AppRoutingDesign(
     context: Context,
-    uiStore: UiStore,
+    private val uiStore: UiStore,
     private val selected: MutableSet<String>,
     private var currentMode: AccessControlMode,
 ) : Design<AppRoutingDesign.Request>(context) {
@@ -35,8 +37,8 @@ class AppRoutingDesign(
 
     private val adapter = AppAdapter(context, selected)
 
-    private val menu: AccessControlMenu by lazy {
-        AccessControlMenu(context, binding.menuView, uiStore, requests)
+    private val menu: PopupMenu by lazy {
+        createMenu()
     }
 
     val apps: List<AppInfo>
@@ -82,14 +84,80 @@ class AppRoutingDesign(
         binding.menuView.isEnabled = isListEnabled
     }
 
+    private fun createMenu(): PopupMenu {
+        val popupMenu = PopupMenu(context, binding.menuView)
+        popupMenu.menuInflater.inflate(R.menu.menu_access_control, popupMenu.menu)
+
+        when (uiStore.accessControlSort) {
+            AppInfoSort.Label ->
+                popupMenu.menu.findItem(R.id.name).isChecked = true
+            AppInfoSort.PackageName ->
+                popupMenu.menu.findItem(R.id.package_name).isChecked = true
+            AppInfoSort.InstallTime ->
+                popupMenu.menu.findItem(R.id.install_time).isChecked = true
+            AppInfoSort.UpdateTime ->
+                popupMenu.menu.findItem(R.id.update_time).isChecked = true
+        }
+
+        popupMenu.menu.findItem(R.id.system_apps).isChecked = !uiStore.accessControlSystemApp
+        popupMenu.menu.findItem(R.id.reverse).isChecked = uiStore.accessControlReverse
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            if (item.isCheckable)
+                item.isChecked = !item.isChecked
+
+            when (item.itemId) {
+                R.id.select_all ->
+                    requests.trySend(Request.SelectAll)
+                R.id.select_none ->
+                    requests.trySend(Request.SelectNone)
+                R.id.select_invert ->
+                    requests.trySend(Request.SelectInvert)
+                R.id.system_apps -> {
+                    uiStore.accessControlSystemApp = !item.isChecked
+                    requests.trySend(Request.ReloadApps)
+                }
+                R.id.name -> {
+                    uiStore.accessControlSort = AppInfoSort.Label
+                    requests.trySend(Request.ReloadApps)
+                }
+                R.id.package_name -> {
+                    uiStore.accessControlSort = AppInfoSort.PackageName
+                    requests.trySend(Request.ReloadApps)
+                }
+                R.id.install_time -> {
+                    uiStore.accessControlSort = AppInfoSort.InstallTime
+                    requests.trySend(Request.ReloadApps)
+                }
+                R.id.update_time -> {
+                    uiStore.accessControlSort = AppInfoSort.UpdateTime
+                    requests.trySend(Request.ReloadApps)
+                }
+                R.id.reverse -> {
+                    uiStore.accessControlReverse = item.isChecked
+                    requests.trySend(Request.ReloadApps)
+                }
+                R.id.import_from_clipboard -> {
+                    requests.trySend(Request.Import)
+                }
+                R.id.export_to_clipboard -> {
+                    requests.trySend(Request.Export)
+                }
+                else -> return@setOnMenuItemClickListener false
+            }
+            true
+        }
+
+        return popupMenu
+    }
+
     init {
         binding.self = this
 
         binding.activityBarLayout.applyFrom(context)
 
-        binding.scrollView.bindAppBarElevation(binding.activityBarLayout)
-
         binding.mainList.recyclerList.also {
+            it.bindAppBarElevation(binding.activityBarLayout)
             it.applyLinearAdapter(context, adapter)
         }
 
