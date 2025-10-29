@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="self"
+            type="com.github.kr328.clash.design.AccessControlQuickDesign" />
+        <variable
+            name="selectedCount"
+            type="int" />
+        <variable
+            name="canSelectApps"
+            type="boolean" />
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@{self.surface.insets.start}"
+        android:paddingEnd="@{self.surface.insets.end}">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:paddingTop="@{self.surface.insets.top}"
+            android:paddingBottom="@{self.surface.insets.bottom}">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.github.kr328.clash.design.view.ActivityBarLayout
+                    android:id="@+id/activity_bar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <include
+                        layout="@layout/common_activity_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.github.kr328.clash.design.view.ActivityBarLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/access_control_mode"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/access_control_mode_description"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                            android:alpha="0.7" />
+
+                        <RadioGroup
+                            android:id="@+id/mode_radio_group"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="vertical">
+
+                            <com.google.android.material.radiobutton.MaterialRadioButton
+                                android:id="@+id/mode_accept_all"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/allow_all_apps"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                                android:textStyle="bold"
+                                android:paddingVertical="8dp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="32dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="@string/allow_all_apps_description"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                android:alpha="0.7" />
+
+                            <com.google.android.material.radiobutton.MaterialRadioButton
+                                android:id="@+id/mode_accept_selected"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/allow_selected_apps"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                                android:textStyle="bold"
+                                android:paddingVertical="8dp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="32dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="@string/allow_selected_apps_description"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                android:alpha="0.7" />
+
+                            <com.google.android.material.radiobutton.MaterialRadioButton
+                                android:id="@+id/mode_deny_selected"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/deny_selected_apps"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                                android:textStyle="bold"
+                                android:paddingVertical="8dp" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="32dp"
+                                android:text="@string/deny_selected_apps_description"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                android:alpha="0.7" />
+                        </RadioGroup>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="12dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp"
+                            android:background="?attr/colorPrimaryContainer">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@id/action_buttons"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/select_applications"
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/selected_count_text"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:text='@{canSelectApps ? @string/format_selected_count(selectedCount) : @string/mode_no_need_select}'
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                                    android:alpha="0.8" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/action_buttons"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:orientation="horizontal">
+
+                                <ImageView
+                                    android:id="@+id/search_view"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:clickable="true"
+                                    android:contentDescription="@string/search"
+                                    android:focusable="true"
+                                    android:padding="8dp"
+                                    android:src="@drawable/ic_baseline_search"
+                                    android:enabled="@{canSelectApps}" />
+
+                                <ImageView
+                                    android:id="@+id/menu_view"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:layout_marginStart="4dp"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:clickable="true"
+                                    android:contentDescription="@string/more"
+                                    android:focusable="true"
+                                    android:padding="8dp"
+                                    android:src="@drawable/ic_baseline_more_vert"
+                                    android:enabled="@{canSelectApps}" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1">
+
+                            <include
+                                android:id="@+id/main_list"
+                                layout="@layout/common_recycler_list"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                            <TextView
+                                android:id="@+id/disabled_overlay_text"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/mode_no_need_select"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                                android:alpha="0.5"
+                                android:visibility="@{canSelectApps ? View.GONE : View.VISIBLE}" />
+
+                            <View
+                                android:id="@+id/disabled_overlay"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="?attr/colorSurface"
+                                android:alpha="0.7"
+                                android:visibility="@{canSelectApps ? View.GONE : View.VISIBLE}"
+                                android:clickable="true"
+                                android:focusable="true" />
+                        </FrameLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

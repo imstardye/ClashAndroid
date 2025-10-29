@@ -246,4 +246,13 @@
     <string name="external_control_activity">外部控制</string>
     <string name="external_control_started">NetPulse 服务已启动</string>
     <string name="external_control_stopped">NetPulse 服务已停止</string>
+    <string name="access_control_mode_description">选择访问控制模式来控制哪些应用可以使用VPN</string>
+    <string name="allow_all_apps_description">所有应用都可以通过 VPN 访问网络</string>
+    <string name="allow_selected_apps_description">仅下方勾选的应用可以通过 VPN 访问网络</string>
+    <string name="deny_selected_apps_description">除了下方勾选的应用，其他应用都可以通过 VPN 访问网络</string>
+    <string name="select_applications">选择应用</string>
+    <string name="format_selected_count">已选择 %d 个应用</string>
+    <string name="mode_no_need_select">当前模式下无需选择应用</string>
+    <string name="access_control_quick">访问控制</string>
+    <string name="access_control_quick_summary">%1$s · %2$d 个应用</string>
 </resources>

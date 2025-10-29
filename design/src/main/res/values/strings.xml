@@ -367,6 +367,15 @@
     <string name="external_control_activity">External Control</string>
     <string name="external_control_started">NetPulse service started</string>
     <string name="external_control_stopped">NetPulse service stopped</string>
+    <string name="access_control_mode_description">Choose how Clash handles app traffic</string>
+    <string name="allow_all_apps_description">Every app will be routed through the VPN</string>
+    <string name="allow_selected_apps_description">Only the apps you select below can use the VPN</string>
+    <string name="deny_selected_apps_description">All apps can use the VPN except the ones you select below</string>
+    <string name="select_applications">Select applications</string>
+    <string name="format_selected_count">%d apps selected</string>
+    <string name="mode_no_need_select">No app selection needed in this mode</string>
+    <string name="access_control_quick">Access control</string>
+    <string name="access_control_quick_summary">%1$s · %2$d apps</string>
 
     <string name="hide_app_icon_title">Hide App Icon</string>
     <string name="hide_app_icon_desc">You can dial *#*#63878573#*#* to open this App</string>

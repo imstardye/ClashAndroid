@@ -70,6 +70,8 @@ class MainActivity : BaseActivity<MainDesign>() {
                         }
                         MainDesign.Request.OpenSettings ->
                             startActivity(SettingsActivity::class.intent)
+                        MainDesign.Request.OpenAccessControl ->
+                            startActivity(AccessControlActivity::class.intent)
                         MainDesign.Request.OpenAbout ->
                             design.showAbout(queryAppVersionName())
                         is MainDesign.Request.SetMode -> {

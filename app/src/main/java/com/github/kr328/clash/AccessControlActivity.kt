@@ -7,9 +7,10 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import androidx.core.content.getSystemService
-import com.github.kr328.clash.design.AccessControlDesign
+import com.github.kr328.clash.design.AccessControlQuickDesign
 import com.github.kr328.clash.design.model.AppInfo
 import com.github.kr328.clash.design.util.toAppInfo
+import com.github.kr328.clash.service.model.AccessControlMode
 import com.github.kr328.clash.service.store.ServiceStore
 import com.github.kr328.clash.util.startClashService
 import com.github.kr328.clash.util.stopClashService
@@ -19,7 +20,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
 
-class AccessControlActivity : BaseActivity<AccessControlDesign>() {
+class AccessControlActivity : BaseActivity<AccessControlQuickDesign>() {
     override suspend fun main() {
         val service = ServiceStore(this)
 
@@ -27,10 +28,15 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
             service.accessControlPackages.toMutableSet()
         }
 
+        var currentMode = withContext(Dispatchers.IO) {
+            service.accessControlMode
+        }
+
         defer {
             withContext(Dispatchers.IO) {
-                val changed = selected != service.accessControlPackages
+                val changed = selected != service.accessControlPackages || currentMode != service.accessControlMode
                 service.accessControlPackages = selected
+                service.accessControlMode = currentMode
                 if (clashRunning && changed) {
                     stopClashService()
                     while (clashRunning) {
@@ -41,11 +47,11 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
             }
         }
 
-        val design = AccessControlDesign(this, uiStore, selected)
+        val design = AccessControlQuickDesign(this, uiStore, selected, currentMode)
 
         setContentDesign(design)
 
-        design.requests.send(AccessControlDesign.Request.ReloadApps)
+        design.requests.send(AccessControlQuickDesign.Request.ReloadApps)
 
         while (isActive) {
             select<Unit> {
@@ -54,11 +60,12 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
                 }
                 design.requests.onReceive {
                     when (it) {
-                        AccessControlDesign.Request.ReloadApps -> {
+                        AccessControlQuickDesign.Request.ReloadApps -> {
                             design.patchApps(loadApps(selected))
+                            design.updateSelectedCount()
                         }
 
-                        AccessControlDesign.Request.SelectAll -> {
+                        AccessControlQuickDesign.Request.SelectAll -> {
                             val all = withContext(Dispatchers.Default) {
                                 design.apps.map(AppInfo::packageName)
                             }
@@ -67,15 +74,17 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
                             selected.addAll(all)
 
                             design.rebindAll()
+                            design.updateSelectedCount()
                         }
 
-                        AccessControlDesign.Request.SelectNone -> {
+                        AccessControlQuickDesign.Request.SelectNone -> {
                             selected.clear()
 
                             design.rebindAll()
+                            design.updateSelectedCount()
                         }
 
-                        AccessControlDesign.Request.SelectInvert -> {
+                        AccessControlQuickDesign.Request.SelectInvert -> {
                             val all = withContext(Dispatchers.Default) {
                                 design.apps.map(AppInfo::packageName).toSet() - selected
                             }
@@ -84,9 +93,10 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
                             selected.addAll(all)
 
                             design.rebindAll()
+                            design.updateSelectedCount()
                         }
 
-                        AccessControlDesign.Request.Import -> {
+                        AccessControlQuickDesign.Request.Import -> {
                             val clipboard = getSystemService<ClipboardManager>()
                             val data = clipboard?.primaryClip
 
@@ -99,9 +109,10 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
                             }
 
                             design.rebindAll()
+                            design.updateSelectedCount()
                         }
 
-                        AccessControlDesign.Request.Export -> {
+                        AccessControlQuickDesign.Request.Export -> {
                             val clipboard = getSystemService<ClipboardManager>()
 
                             val data = ClipData.newPlainText(
@@ -110,6 +121,13 @@ class AccessControlActivity : BaseActivity<AccessControlDesign>() {
                             )
 
                             clipboard?.setPrimaryClip(data)
+                        }
+
+                        is AccessControlQuickDesign.Request.ChangeMode -> {
+                            currentMode = it.mode
+                            if (it.mode == AccessControlMode.AcceptAll) {
+                                design.updateSelectedCount()
+                            }
                         }
                     }
                 }

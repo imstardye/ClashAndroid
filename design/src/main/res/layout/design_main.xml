@@ -27,6 +27,9 @@
             name="colorClashStopped"
             type="int" />
         <variable
+            name="accessControlSummary"
+            type="String" />
+        <variable
             name="hasProviders"
             type="boolean" />
         <variable
@@ -476,6 +479,15 @@
                             android:text="@string/quick_actions"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
                             android:textStyle="bold" />
+
+                        <com.github.kr328.clash.design.view.LargeActionLabel
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/main_card_item_spacing"
+                            android:onClick="@{() -> self.request(Request.openAccessControl())}"
+                            app:icon="@drawable/ic_baseline_vpn_lock"
+                            app:subtext='@{accessControlSummary != null ? accessControlSummary : @string/access_control_mode}'
+                            app:text="@string/access_control_quick" />
 
                         <com.github.kr328.clash.design.view.LargeActionLabel
                             android:layout_width="match_parent"
