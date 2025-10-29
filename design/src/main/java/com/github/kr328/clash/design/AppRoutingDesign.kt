@@ -166,18 +166,18 @@ class AppRoutingDesign(
 
                 val keyword = binding.keywordView.text?.toString() ?: ""
 
-                val apps: List<AppInfo> = if (keyword.isEmpty()) {
+                val filteredApps: List<AppInfo> = if (keyword.isEmpty()) {
                     emptyList()
                 } else {
                     withContext(Dispatchers.Default) {
-                        apps.filter {
+                        this@AppRoutingDesign.apps.filter {
                             it.label.contains(keyword, ignoreCase = true) ||
                                     it.packageName.contains(keyword, ignoreCase = true)
                         }
                     }
                 }
 
-                adapter.patchDataSet(adapter::apps, apps, false, AppInfo::packageName)
+                adapter.patchDataSet(adapter::apps, filteredApps, false, AppInfo::packageName)
 
                 delay(200)
             }
