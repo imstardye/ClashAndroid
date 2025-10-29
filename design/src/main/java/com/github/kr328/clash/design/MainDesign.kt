@@ -35,6 +35,7 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
         object OpenLogs : Request()
         object OpenSettings : Request()
         object OpenAbout : Request()
+        object OpenAppRouting : Request()
         data class SetMode(val mode: TunnelState.Mode) : Request()
         data class SelectGlobalProxy(val name: String) : Request()
 
@@ -59,6 +60,9 @@ class MainDesign(context: Context) : Design<MainDesign.Request>(context) {
 
             @JvmStatic
             fun openAbout(): Request = OpenAbout
+
+            @JvmStatic
+            fun openAppRouting(): Request = OpenAppRouting
 
             @JvmStatic
             fun setMode(mode: TunnelState.Mode): Request = SetMode(mode)

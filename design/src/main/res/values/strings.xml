@@ -166,6 +166,14 @@
     <string name="access_control_packages">Access Control Packages</string>
     <string name="access_control_packages_summary">Configure access permission for apps</string>
 
+    <string name="app_routing">App Routing</string>
+    <string name="app_routing_summary">Control which apps can use VPN</string>
+    <string name="app_routing_mode_title">Routing Mode</string>
+    <string name="app_routing_mode_allow_all_desc">All apps can access the network through VPN</string>
+    <string name="app_routing_mode_allow_selected_desc">Only selected apps can use VPN, others will connect directly</string>
+    <string name="app_routing_mode_deny_selected_desc">Selected apps will connect directly, others use VPN</string>
+    <string name="app_routing_list_title">App List</string>
+
     <string name="options_unavailable">Options Unavailable until Clash Stopped</string>
 
     <string name="general">General</string>
