@@ -168,11 +168,6 @@
             android:exported="false"
             android:label="@string/access_control_packages" />
         <activity
-            android:name=".AppRoutingActivity"
-            android:configChanges="uiMode"
-            android:exported="false"
-            android:label="@string/app_routing" />
-        <activity
             android:name=".FilesActivity"
             android:configChanges="uiMode"
             android:exported="false"

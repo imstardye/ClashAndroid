@@ -481,15 +481,6 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/main_card_item_spacing"
-                            android:onClick="@{() -> self.request(Request.openAppRouting())}"
-                            app:icon="@drawable/ic_baseline_apps"
-                            app:subtext="@string/app_routing_summary"
-                            app:text="@string/app_routing" />
-
-                        <com.github.kr328.clash.design.view.LargeActionLabel
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/main_card_item_spacing"
                             android:onClick="@{() -> self.request(Request.openLogs())}"
                             app:icon="@drawable/ic_baseline_assignment"
                             app:subtext="@string/view_logs"
