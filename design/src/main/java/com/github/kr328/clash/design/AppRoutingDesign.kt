@@ -2,7 +2,6 @@ package com.github.kr328.clash.design
 
 import android.content.Context
 import android.view.View
-import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import com.github.kr328.clash.design.adapter.AppAdapter
 import com.github.kr328.clash.design.component.AccessControlMenu
@@ -88,8 +87,9 @@ class AppRoutingDesign(
 
         binding.activityBarLayout.applyFrom(context)
 
+        binding.scrollView.bindAppBarElevation(binding.activityBarLayout)
+
         binding.mainList.recyclerList.also {
-            it.bindAppBarElevation(binding.activityBarLayout)
             it.applyLinearAdapter(context, adapter)
         }
 
